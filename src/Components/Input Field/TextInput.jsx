@@ -1,12 +1,12 @@
-export function TextInput({label}) {
-    // const [showPassword, setShowPassword] = React.useState(false);
-    // const [input, setInput] = React.useState('');
+export function TextInput({label, value, onChange}) {
 
     return (
         <div className={'text-input'}>
             <label>{label}</label>
-            <input type = 'text'>
-
+            <input type = 'text'
+            name={label}
+            onChange={onChange}
+            value={value}>
             </input>
         </div>
     )
