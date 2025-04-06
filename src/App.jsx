@@ -1,11 +1,12 @@
 import './App.css'
+import {Login} from "./Components/Authorization/Login.jsx";
 
 function App() {
 
 
   return (
     <>
-      <h1>Text</h1>
+      <Login/>
     </>
   )
 }
