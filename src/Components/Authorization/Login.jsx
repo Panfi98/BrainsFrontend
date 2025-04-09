@@ -2,7 +2,7 @@ import {TextInput} from "../Input Field/TextInput.jsx";
 import {useState} from "react";
 import {SubmitButton} from "../Button/SubmitButton.jsx";
 
-export const Login = () => {
+export const Login = ({setAuthToken}) => {
 
     const [formData, setFormData] = useState({username: "", password: ""});
     const [token, setToken] = useState("");
@@ -25,7 +25,8 @@ export const Login = () => {
                     'accept': '*/*',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
+                body: JSON.stringify
+                ({
                     username: formData.username,
                     password: formData.password
                 })
@@ -37,7 +38,7 @@ export const Login = () => {
 
             const data = await loginResponse.json();
             const authToken = data.token;
-            setToken(authToken);
+            setAuthToken(authToken);
 
 
             const userResponse = await fetch('https://localhost:7106/user', {
