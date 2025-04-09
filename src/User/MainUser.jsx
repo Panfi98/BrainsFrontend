@@ -15,10 +15,9 @@ export const User = ({ authToken }) => {
         <div className={'User'}>
             <h1>Users</h1>
             <div className='GetAllUsers'>
-                <GetAllUsers users={users} setUsers={setUsers} />
+                <SubmitButton onClick={loadUsers} />
             </div>
             <div className='GetUserById'>
-                
             </div>
         </div>
     );
