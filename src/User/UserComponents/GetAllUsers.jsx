@@ -3,7 +3,10 @@ import { useEffect } from "react";
 export const GetAllUsers = ({ users, setUsers, authToken }) => {
     useEffect(() => {
         const fetchUsers = async () => {
+            if(!authToken) return;
             try {
+                console.log('Fetching users with token:', authToken);
+
                 const res = await fetch("https://localhost:7106/user", {
                     method: "GET",
                     headers: {
@@ -17,16 +20,22 @@ export const GetAllUsers = ({ users, setUsers, authToken }) => {
                 }
 
                 const data = await res.json();
-                const usersData = data.data;
+                console.log('Full API Responce:', data);
+
+                const usersData = data.data || data;
                 console.log('User data:', usersData);
+
                 setUsers(usersData);
             } catch (error) {
                 console.error('Error', error);
             }
         };
-
-        fetchUsers();
-    }, [setUsers, authToken]);
+        if(authToken){
+            fetchUsers();
+        }else{
+            console.log('No auth token available.')
+        }
+        }, [setUsers, authToken]);
 
     return (
         <ul className='users-list'>
