@@ -30,6 +30,7 @@ export function AuthProvider(props){
         const data = await authResponse.json();
         const authToken = data.token;
         setToken(authToken);
+        setIsLoggedIn(true)
     }
 
     const value = {
