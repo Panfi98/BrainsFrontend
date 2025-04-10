@@ -7,7 +7,7 @@ function App() {
 
     return (
         <>
-            <Login setAuthToken={setAuthToken} />  {/* Передаем setAuthToken как пропс */}
+            <Login setAuthToken={setAuthToken} authToken={authToken} />  {/* Передаем setAuthToken как пропс */}
             <User authToken={authToken} />  {/* Передаем токен в компонент User */}
         </>
     );

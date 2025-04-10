@@ -2,10 +2,10 @@ import {TextInput} from "../Input Field/TextInput.jsx";
 import {useState} from "react";
 import {SubmitButton} from "../Button/SubmitButton.jsx";
 
-export const Login = ({setAuthToken}) => {
+export const Login = ({setAuthToken, authToken}) => {
 
     const [formData, setFormData] = useState({username: "", password: ""});
-    const [token, setToken] = useState("");
+
 
 
 
@@ -70,7 +70,7 @@ export const Login = ({setAuthToken}) => {
             <SubmitButton onClick={handleSubmit}/>
             <h2>Token</h2>
             <div>
-                {token ? token : 'No token yet'}
+                {authToken ? authToken : 'No token yet'}
             </div>
             <h2>Values you just have typed:</h2>
             <div>
