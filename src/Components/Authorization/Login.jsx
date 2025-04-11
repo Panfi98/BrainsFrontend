@@ -1,7 +1,9 @@
+import './Login.css';
 import {TextInput} from "../Input Field/TextInput.jsx";
 import {SubmitButton} from "../Button/SubmitButton.jsx";
 import {useAuth} from "../../Context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
+
 
 export const Login = () => {
     const {token, authenticate, userData, setUserData} = useAuth()
@@ -18,6 +20,7 @@ export const Login = () => {
         try {
             await authenticate();
             navigate("/dashboard");
+            console.log("Authentication successfull. Token: ", token)
         } catch (error) {
             console.error("Authentication failed:", error);
         }
@@ -29,10 +32,6 @@ export const Login = () => {
             <TextInput label={'username'} onChange={onChange} value={userData.username}/>
             <TextInput label={'password'} onChange={onChange} value={userData.password}/>
             <SubmitButton onClick={handleSubmit}/>
-            <h2>Token</h2>
-            <div>
-                {token ?? 'No token yet'}
-            </div>
         </div>
     )
 }
