@@ -2,13 +2,15 @@ import './App.css'
 import {Login} from "./Components/Authorization/Login.jsx";
 import {AuthProvider} from "./Context/AuthContext.jsx";
 import {Routes,Route} from 'react-router-dom';
+import Dashboard from "./Components/Dashboard.jsx";
 
 
 function App() {
   return (
     <AuthProvider>
         <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Login />}/>
+            <Route path="/dashboard" element={<Dashboard />}/>
         </Routes>
     </AuthProvider>
   )

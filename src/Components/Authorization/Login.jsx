@@ -1,9 +1,11 @@
 import {TextInput} from "../Input Field/TextInput.jsx";
 import {SubmitButton} from "../Button/SubmitButton.jsx";
 import {useAuth} from "../../Context/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
 
 export const Login = () => {
     const {token, authenticate, userData, setUserData} = useAuth()
+    const navigate = useNavigate();
 
     const onChange = (e) => {
         e.preventDefault();
@@ -13,7 +15,12 @@ export const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        authenticate()
+        try {
+            await authenticate();
+            navigate("/dashboard");
+        } catch (error) {
+            console.error("Authentication failed:", error);
+        }
     }
 
 
