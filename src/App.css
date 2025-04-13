@@ -4,7 +4,6 @@
     grid-template-rows: 60px 1fr; /* Верхняя панель (60px) и основное содержимое */
     min-height: 100vh;
     gap: 10px;
-    position: relative;
 }
 
 .dashboard-container {

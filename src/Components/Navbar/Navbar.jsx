@@ -27,7 +27,7 @@ export default function Navbar() {
                     Reports
                 </CustomLink>
                 <CustomLink to='#'>
-                    Settngs
+                    Settings
                 </CustomLink>
             </ul>
         </nav>
