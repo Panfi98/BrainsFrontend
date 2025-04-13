@@ -1,1 +1,13 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 200px 1fr; /* Левая колонка (200px) и основное содержимое */
+    grid-template-rows: 60px 1fr; /* Верхняя панель (60px) и основное содержимое */
+    min-height: 100vh;
+    gap: 10px;
+    position: relative;
+}
 
+.dashboard-container {
+    grid-column: 2; /* Основное содержимое занимает вторую колонку */
+    grid-row: 2; /* Основное содержимое занимает вторую строку */
+}
