@@ -1,17 +1,23 @@
 import './App.css'
 import {Login} from "./Components/Authorization/Login.jsx";
 import {AuthProvider} from "./Context/AuthContext.jsx";
-import {Routes,Route} from 'react-router-dom';
+import {Routes,Route,useLocation} from 'react-router-dom';
 import Dashboard from "./Components/Dashboard.jsx";
+import Navbar from "./Components/Navbar/Navbar.jsx";
 
 
 function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
-        <Routes>
+      <div className="grid-container">
+        {location.pathname !== "/" && <Navbar />}
+          <Routes>
             <Route path="/" element={<Login />}/>
             <Route path="/dashboard" element={<Dashboard />}/>
-        </Routes>
+          </Routes>
+      </div>
     </AuthProvider>
   )
 }

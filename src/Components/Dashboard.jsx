@@ -1,4 +1,5 @@
 import React from "react";
+import '../App.jsx';
 import {useAuth} from "../Context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 
@@ -19,17 +20,7 @@ const Dashboard = () => {
             </header>
 
             <div className="dashboard-content">
-                <aside className="sidebar">
-                    <nav>
-                        <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Analytics</a></li>
-                            <li><a href="#">Reports</a></li>
-                            <li><a href="#">Settings</a></li>
-                        </ul>
-                    </nav>
-                </aside>
-        </div>
+            </div>
             <footer className="dashboard-footer">
                 <p>© 2025 Worker App. All rights reserved</p>
             </footer>
