@@ -1,0 +1,59 @@
+.your-applications{
+    grid-column: 2;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 100px 1fr 1fr 1fr;
+    gap: 30px;
+    margin: 20px
+}
+
+.your-applications-header{
+    grid-row: 1;
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cv-button{
+    grid-row: 2;
+    grid-column: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+    border-radius: 25px;
+}
+
+.cover-letter-button{
+    grid-row: 3;
+    grid-column: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: green;
+    border-radius: 25px;
+}
+
+.your-application-maker{
+    grid-row: 4;
+    grid-column: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    border-radius: 25px;
+}
+
+.applications-list{
+    grid-row: 2 / -1;
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: purple;
+    border-radius: 10px;
+    padding: 20px;
+    border-radius: 25px;
+}
