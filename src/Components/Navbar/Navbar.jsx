@@ -8,7 +8,7 @@ export default function Navbar() {
             <Link to='/dashboard'>
                 Home
             </Link>   
-            <Link to='#'>
+            <Link to='/profile'>
                     Profile
             </Link>
         </nav>

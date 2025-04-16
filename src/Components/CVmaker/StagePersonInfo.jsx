@@ -3,20 +3,34 @@ import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 
-const CVmaker = () => {
+const StagePersonInfo = () => {
     const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
     const navigate = useNavigate();
 
     return (
         <div className="cv-maker">
             <div className="last-stage"></div>
-            <h1 className="cv-maker-header">CV Maker</h1>
+            <div className="cv-maker-header">
+                <h1 className="cv-maker-header">CV Maker</h1>
+                <h2>Stage 1</h2>
+            </div>
             <div className="next-stage"></div>
             <div className="cv-form">
                 <form>
+                    <h2>Personal info</h2>
                     <div className="input-group">
-                        <label htmlFor="name">Name:</label>
-                        <input type="text" id="name" name="name" required />
+                        <label htmlFor="firstName">First name:</label>
+                        <input type="text" id="firstName" name="firstName" required />
+                    </div>
+
+                    <div className="input-group">
+                        <label htmlFor="lastName">Last name:</label>
+                        <input type="text" id="lastName" name="lastName" required />
+                    </div>
+
+                    <div className="input-group">
+                        <label htmlFor="dateOfBirth">Date of birth:</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required />
                     </div>
 
                     <div className="input-group">
@@ -30,11 +44,11 @@ const CVmaker = () => {
                     </div>
 
                     <div className="input-group">
-                        <label htmlFor="experience">Experience:</label>
-                        <textarea id="experience" name="experience" required></textarea>
+                        <label htmlFor="address">Address:</label>
+                        <input type="text" id="address" name="address" required></input>
                     </div>
 
-                    <button type="submit">Next stage</button>
+                    <button type="submit" onClick={() => navigate("/stage-education-info")}>Next stage</button>
                 </form>
             </div>
             <div className="cv-tips">
@@ -44,4 +58,4 @@ const CVmaker = () => {
     );
 }
 
-export default CVmaker;
+export default StagePersonInfo;

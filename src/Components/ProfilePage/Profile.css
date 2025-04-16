@@ -1,0 +1,7 @@
+.profile-page{
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}

@@ -6,8 +6,13 @@ import Dashboard from "./Components/Dashboard.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import FirstPage from "./Components/FirstPage/FirstPage.jsx";
 import YourApplications from "./Components/Your Applications/YourApplications.jsx";
-import CVmaker from './Components/CVmaker/CVmaker.jsx';
-
+import StagePersonInfo from './Components/CVmaker/StagePersonInfo.jsx';
+import StageEducationInfo from './Components/CVmaker/StageEducationInfo.jsx';
+import StageProjectInfo from './Components/CVmaker/StageProjectInfo.jsx';
+import StageSkillsInfo from './Components/CVmaker/StageSkillsInfo.jsx';
+import StageExperienceInfo from './Components/CVmaker/StageExperienceInfo.jsx';
+import StageCertificationInfo from './Components/CVmaker/StageCertificationInfo.jsx';
+import Profile from './Components/ProfilePage/Profile.jsx';
 
 function App() {
   const location = useLocation();
@@ -19,9 +24,15 @@ function App() {
           <Routes>
             <Route path="/" element={<FirstPage />}/>
             <Route path="/login" element={<Login />}/>
+            <Route path="/profile" element={<Profile />}/>
             <Route path="/dashboard" element={<Dashboard />}/>
             <Route path="/your-applications" element={<YourApplications />}/>
-            <Route path="/cv" element={<CVmaker />}/>
+            <Route path="/stage-person-info" element={<StagePersonInfo />}/>
+            <Route path="/stage-education-info" element={<StageEducationInfo />}/>
+            <Route path="/stage-projects-info" element={<StageProjectInfo />}/>
+            <Route path="/stage-skills-info" element={<StageSkillsInfo />}/>
+            <Route path="/stage-experience-info" element={<StageExperienceInfo />}/>
+            <Route path="/stage-certification-info" element={<StageCertificationInfo />}/>
           </Routes>
       </div>
     </AuthProvider>

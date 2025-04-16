@@ -22,8 +22,22 @@
     grid-row: 1;
     grid-column: 2;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #56c141;
+    border-radius: 25px;
+}
+
+.cv-maker-header h1{
+    font-size: 40px;
+    padding: 0;
+    margin: 0;
+}
+.cv-maker-header h2{
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
 }
 
 .next-stage{
@@ -49,16 +63,48 @@
 .cv-form form{
     display: flex;
     flex-direction: column;
+    justify-content: start;
     gap: 20px;
     width: 100%;
+    height: 100%;
     padding: 50px;
+}
+
+.cv-form form h2{
+    font-size: 40px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    padding: 30px 0 10px 0;
 }
 
 .input-group{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    gap: 20px;
     align-items: center;
+}
+
+.input-group label{
+    font-size: 30px;
+    width: 30%;
+    text-align: left;
+}
+.input-group input{
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.cv-form form button{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
 }
 
 .cv-tips{

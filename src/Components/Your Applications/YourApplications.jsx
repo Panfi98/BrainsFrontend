@@ -15,7 +15,7 @@ const YourApplications = () => {
                 <h1>Your Applications</h1>
             </header>
             <div className="cv-button">
-                <button onClick={() => navigate('/cv')}>Create CV</button>
+                <button onClick={() => navigate('/stage-person-info')}>Create CV</button>
             </div>
             <div className="cover-letter-button">
                 <button onClick={() => navigate('/cover-letter')}>Create Cover Letter</button>
