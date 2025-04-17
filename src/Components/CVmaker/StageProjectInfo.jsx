@@ -12,7 +12,7 @@ const StageProjectInfo = () => {
             <div className="last-stage"></div>
             <div className="cv-maker-header">
                 <h1 className="cv-maker-header">CV Maker</h1>
-                <h2>Stage 2</h2>
+                <h2>Stage 3</h2>
             </div>
             <div className="next-stage"></div>
             <div className="cv-form">

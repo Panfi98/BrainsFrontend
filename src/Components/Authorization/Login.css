@@ -42,7 +42,7 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-button {
+.login button {
     background-color: #4a90e2;
     color: white;
     border: none;
@@ -54,10 +54,10 @@ button {
     transition: background-color 0.2s ease;
 }
 
-button:hover {
+.login button:hover {
     background-color: #3a7bc8;
 }
 
-button:active {
+.login button:active {
     background-color: #2d6db5;
 }
