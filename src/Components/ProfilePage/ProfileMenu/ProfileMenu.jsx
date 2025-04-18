@@ -1,5 +1,4 @@
 import './ProfileMenu.css';
-import { GoChevronRight } from "react-icons/go";
 import { HiOutlineUser } from "react-icons/hi2";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
