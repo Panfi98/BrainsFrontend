@@ -13,6 +13,7 @@ import StageSkillsInfo from './Components/CVmaker/StageSkillsInfo.jsx';
 import StageExperienceInfo from './Components/CVmaker/StageExperienceInfo.jsx';
 import StageCertificationInfo from './Components/CVmaker/StageCertificationInfo.jsx';
 import Profile from './Components/ProfilePage/Profile.jsx';
+import {SignUp} from "./Components/Authorization/SignUp.jsx";
 
 function App() {
   const location = useLocation();
@@ -20,10 +21,11 @@ function App() {
   return (
     <AuthProvider>
       <div className="grid-container">
-        {(location.pathname !== "/login" && location.pathname !== "/") && <Navbar />}
+        {(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/signup") && <Navbar />}
           <Routes>
             <Route path="/" element={<FirstPage />}/>
             <Route path="/login" element={<Login />}/>
+            <Route path="/signup" element={<SignUp/>}/>
             <Route path="/profile" element={<Profile />}/>
             <Route path="/dashboard" element={<Dashboard />}/>
             <Route path="/your-applications" element={<YourApplications />}/>
