@@ -1,0 +1,117 @@
+.profile-page{
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: start;
+    padding: 50px 30px 0 0;
+    background-color: #D3E3FF;
+}
+
+.profile-page h2{
+    font-size: 36px;
+    font-weight: 500;
+}
+
+.profile-content{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 976px;
+    margin-right: 4rem;
+}
+
+.profile-person{
+    display: flex;
+    gap: 1rem;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.avatar{
+    width: 35%;
+    height: 5rem;
+    border-radius: 50%;
+}
+
+.person-info{
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    gap: 2rem;
+}
+
+.person-name{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.person-info p{
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.profile-education{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #FFFFFF; 
+    border-radius: 12px;
+    gap: 38px;
+}
+
+.education-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 38px;
+    padding: 40px;
+    width: 100%;
+}
+
+.education-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 28px;
+    width: 100%;
+}
+
+.education-item{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.u-name{
+    font-size: 28px;
+}
+
+.degree{
+    font-size: 20px;
+}
+
+.date{
+    font-size: 16px;
+}
+
+.shadow{
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.25),
+    -2px -2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.edit-button{
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    height: 3rem;
+    border: none;
+    cursor: pointer;
+    padding: 30px 25px;
+}

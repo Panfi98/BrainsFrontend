@@ -1,39 +1,40 @@
+.login-container{
+    width: 100vw;
+    height: 100vh;
+    background-color: #D3E3FF;
+    font-size: 36px;
+}
+
 .login {
-    min-width: 400px;
+    width: 976px;
+    height: 480px;
     margin: 100px auto;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
     position: absolute;
     left: 50%;
     top: 25%;
     transform: translate(-50%, -50%);
-}
-
-.text-input {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-}
-
-.text-input label {
-    font-size: 18px;
+    box-shadow: 4px 4px 16px #00000040,
+                -4px -4px 16px #00000040;
     font-weight: 500;
-    margin-bottom: 6px;
-    color: #333;
-    text-transform: capitalize;
-}
+            }
 
-.text-input input {
+.login input {
+    width: 638px;
+    height: 40px;
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 24px;
     transition: border-color 0.2s ease-in-out;
+    text-transform: capitalize;
 }
 
 .text-input input:focus {
@@ -42,22 +43,48 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-button {
+.login button {
     background-color: #4a90e2;
     color: white;
     border: none;
     border-radius: 4px;
     padding: 12px;
-    font-size: 16px;
+    width: 304px;
+    height: 50px;
+    font-size: 24px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-button:hover {
+.login-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.register-text a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+.register-text {
+    font-size: 24px;
+}
+
+.forgot-password-text {
+    font-size: 20px;
+    color: #666;
+    text-decoration: none;
+}
+
+.login button:hover {
     background-color: #3a7bc8;
 }
 
-button:active {
+.login button:active {
     background-color: #2d6db5;
 }

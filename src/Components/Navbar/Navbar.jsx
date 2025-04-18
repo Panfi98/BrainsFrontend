@@ -8,26 +8,20 @@ export default function Navbar() {
             <Link to='/dashboard'>
                 Home
             </Link>   
-            <Link to='#'>
+            <Link to='/profile'>
                     Profile
             </Link>
         </nav>
         <nav className='nav-left'>
             <ul>
-                <CustomLink to='#'>
-                    CVmaker
+                <CustomLink to='/your-applications'>
+                    Your applications
                 </CustomLink>
                 <CustomLink to='#'>
-                    Job
+                    Job Listing
                 </CustomLink>
                 <CustomLink to='#'>
                     Analytics
-                </CustomLink>
-                <CustomLink to='#'>
-                    Reports
-                </CustomLink>
-                <CustomLink to='#'>
-                    Settings
                 </CustomLink>
             </ul>
         </nav>
