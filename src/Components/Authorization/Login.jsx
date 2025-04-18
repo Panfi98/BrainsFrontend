@@ -31,7 +31,7 @@ export const Login = () => {
             <div className={'login'}>
                 <h3>Log in</h3>
                 <TextInput label={'username'} onChange={onChange} value={userData.username}/>
-                <TextInput label={'password'} onChange={onChange} value={userData.password}/>
+                <TextInput label={'password'} onChange={onChange} value={userData.password} type="password"/>
                 <button onClick={handleSubmit}>Login</button>
                 <div className='login-footer'>
                     <p className='register-text'>
