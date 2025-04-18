@@ -1,6 +1,5 @@
 import './Login.css';
 import {TextInput} from "../Input Field/TextInput.jsx";
-import {SubmitButton} from "../Button/SubmitButton.jsx";
 import {useAuth} from "../../Context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 
@@ -28,10 +27,20 @@ export const Login = () => {
 
 
     return (
-        <div className={'login'}>
-            <TextInput label={'username'} onChange={onChange} value={userData.username}/>
-            <TextInput label={'password'} onChange={onChange} value={userData.password}/>
-            <SubmitButton onClick={handleSubmit}/>
+        <div className='login-container'>
+            <div className={'login'}>
+                <h3>Log in</h3>
+                <TextInput label={'username'} onChange={onChange} value={userData.username}/>
+                <TextInput label={'password'} onChange={onChange} value={userData.password}/>
+                <button onClick={handleSubmit}>Login</button>
+                <div className='login-footer'>
+                    <p className='register-text'>
+                        Don't have an account?  
+                        <a href=""> Sign up</a>
+                    </p>
+                    <a href="" className='forgot-password-text'>Forgot your password?</a>
+                </div>
+            </div>
         </div>
     )
 }
