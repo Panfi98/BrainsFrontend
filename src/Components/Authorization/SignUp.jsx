@@ -50,7 +50,6 @@ export function SignUp() {
         <div className='signup-container'>
             <div className='signup'>
                 <h3>Sign up</h3>
-                <form onSubmit={onSubmit}>
                     <TextInput label='email' onChange={onChange} value={newUserData.email} />
                     <TextInput label='username' onChange={onChange} value={newUserData.username} />
                     <TextInput
@@ -66,13 +65,12 @@ export function SignUp() {
                         type="password"
                     />
                     <button
-                        type="submit"
+                        onClick={onSubmit}
                         className="signup-button"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Signing up...' : 'Sign Up'}
                     </button>
-                </form>
                 <div className='signup-footer'></div>
             </div>
         </div>
