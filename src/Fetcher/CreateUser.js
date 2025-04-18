@@ -12,7 +12,7 @@ export async function CreateUser(userData){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            username: username,
+            name: username,
             password: password,
             email: email,
         })
