@@ -5,16 +5,24 @@ import './CVmaker.css';
 
 const StageCertificationInfo = () => {
     const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
-        const navigate = useNavigate();
+    const navigate = useNavigate();
     
-        return(
+    return(
+        <div className="cv-maker-container">
+            <div className="progress-bar">
+                <p>CV progress</p>
+                <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>    
+                <button className="progress-button" onClick={() => navigate("/stage-projects-info")}>Project info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+            </div>
             <div className="cv-maker">
-                <div className="last-stage"></div>
                 <div className="cv-maker-header">
-                    <h1 className="cv-maker-header">CV Maker</h1>
+                    <h1>CV Maker</h1>
                     <h2>Stage 6</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
                         <h2>Certification info</h2>
@@ -48,13 +56,22 @@ const StageCertificationInfo = () => {
                             <input type="date" id="validTo" name="validTo" required></input>
                         </div>
     
-                        <button type="submit" onClick={() => navigate("#")}>Next stage</button>
+                        <div className="button-group">
+                            <button type="button" onClick={() => navigate("/stage-experience-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate("#")} className="next-btn">Next stage</button>
+                        </div>
                     </form>
                 </div>
-                <div className="cv-tips">
-    
-                </div>
             </div>
+            <div className="cv-tips">
+                <p>Tips</p>
+                <ul>
+                    <li>Make sure to include all relevant certifications.</li>
+                    <li>Double-check the dates and URLs for accuracy.</li>
+                    <li>Keep your descriptions concise and to the point.</li>
+                </ul>
+            </div>
+        </div>
         )
 }
 

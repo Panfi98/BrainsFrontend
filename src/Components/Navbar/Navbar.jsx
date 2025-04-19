@@ -1,31 +1,36 @@
 import './Navbar.css'
 import { Link, useResolvedPath, useMatch } from 'react-router-dom';
+import { IoIosArrowDown } from "react-icons/io";
+import { useAuth } from '../../Context/AuthContext.jsx';
 
 export default function Navbar() {
+    const { userData } = useAuth()
     return (
-    <>  
-        <nav className='nav-above'>
-            <Link to='/dashboard'>
+    <nav className='navbar'>
+        <div className='links'>
+            <Link to='/dashboard' className='logo'>
                 Home
-            </Link>   
-            <Link to='/profile'>
-                    Profile
             </Link>
-        </nav>
-        <nav className='nav-left'>
-            <ul>
-                <CustomLink to='/your-applications'>
+            <div className='sublinks'>
+                <Link to='#'>
+                    Jobs
+                    <IoIosArrowDown className='icon'/>
+                </Link>
+                <Link to='/your-applications'>
                     Your applications
-                </CustomLink>
-                <CustomLink to='#'>
-                    Job Listing
-                </CustomLink>
-                <CustomLink to='#'>
+                    <IoIosArrowDown className='icon'/>
+                </Link>
+                <Link to='#'>
                     Analytics
-                </CustomLink>
-            </ul>
-        </nav>
-    </>
+                    <IoIosArrowDown className='icon'/>
+                </Link>
+            </div>
+        </div>
+        <Link to='/profile' className='profile-link'>
+            {userData.username}
+            <IoIosArrowDown className='icon'/>
+        </Link>
+    </nav>
     )
 }
 
