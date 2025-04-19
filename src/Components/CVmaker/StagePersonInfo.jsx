@@ -56,6 +56,11 @@ const StagePersonInfo = () => {
                             <input type="text" id="address" name="address" required></input>
                         </div>
 
+                        <div className="input-group">
+                            <label htmlFor="photo">Your photo:</label>
+                            <input type="file" id="photo" name="photo" required />
+                        </div>
+
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/your-applications")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={() => navigate("/stage-education-info")} className="next-btn">Next stage</button>

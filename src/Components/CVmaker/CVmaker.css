@@ -148,6 +148,18 @@
     cursor: pointer;
 }
 
+.input-group textarea{
+    width: 60%;
+    height: auto;
+    overflow-y: hidden;
+    resize: none;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    cursor: pointer;
+}
+
 .button-group{
     display: flex;
     flex-direction: row;

@@ -34,7 +34,7 @@ const StageProjectInfo = () => {
 
                         <div className="input-group">
                             <label htmlFor="description">Description:</label>
-                            <input type="text" id="description" name="description" required />
+                            <textarea id="description" name="description" required />
                         </div>
 
                         <div className="input-group">

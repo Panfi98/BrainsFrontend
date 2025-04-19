@@ -29,7 +29,6 @@
     border-radius: 12px;
     font-size: 1.8rem;
     transition: border-color 0.2s ease-in-out;
-    text-transform: capitalize;
 }
 
 .text-input input:focus {
