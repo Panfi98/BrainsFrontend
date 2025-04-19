@@ -1,12 +1,8 @@
-.grid-container {
-    display: grid;
-    grid-template-columns: 200px 1fr; /* Левая колонка (200px) и основное содержимое */
-    grid-template-rows: 60px 1fr; /* Верхняя панель (60px) и основное содержимое */
-    min-height: 100vh;
-    gap: 10px;
-}
-
-.dashboard-container {
-    grid-column: 2; /* Основное содержимое занимает вторую колонку */
-    grid-row: 2; /* Основное содержимое занимает вторую строку */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    height: 100dvh;
+    width: 100dvw;
+    background-color: #D3E3FF;
 }

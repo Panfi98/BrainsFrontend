@@ -3,13 +3,14 @@
     flex-direction: column;
     gap: 1rem;
     width: 304px;
+    height: 388px;
     background-color: #FFFFFF;
     border-radius: 0.5rem;
     text-align: center;
     font-size: 24px;
-    padding: 20px 0;
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1),
                 -2px -2px 12px rgba(0, 0, 0, 0.1);
+    gap: 36px;
     
 }
 
@@ -32,6 +33,7 @@
     justify-content: center;
     align-items: center;
     width: 232px;
+    padding-top: 20px;
 }
 
 .myprofile-btn{

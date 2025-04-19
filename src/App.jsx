@@ -19,9 +19,9 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="grid-container">
+      <div className="main-container">
         {(location.pathname !== "/login" && location.pathname !== "/") && <Navbar />}
-          <Routes>
+        <Routes>
             <Route path="/" element={<FirstPage />}/>
             <Route path="/login" element={<Login />}/>
             <Route path="/profile" element={<Profile />}/>
@@ -33,7 +33,7 @@ function App() {
             <Route path="/stage-skills-info" element={<StageSkillsInfo />}/>
             <Route path="/stage-experience-info" element={<StageExperienceInfo />}/>
             <Route path="/stage-certification-info" element={<StageCertificationInfo />}/>
-          </Routes>
+        </Routes>
       </div>
     </AuthProvider>
   )
