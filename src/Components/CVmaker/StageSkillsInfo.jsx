@@ -51,6 +51,7 @@ const StageSkillsInfo = () => {
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">

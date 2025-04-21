@@ -53,13 +53,13 @@ const StageProjectInfo = () => {
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
                     <h2>Stage 3</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
                         <h2>Project info</h2>

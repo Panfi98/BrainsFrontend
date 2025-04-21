@@ -4,17 +4,15 @@ import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 
-const StageExperienceInfo = () => {
-    const [newExperienceData, setNewExperienceData] = useState({
-        name: "",
-        description: "",
-        startedAt: "",
-        endedAt: "",
-        active: "",
-        type: "",
-        organisation: "",
-        position: ""
-        }); 
+const StageReferenceInfo = () => {
+    const [newReferenceData, setNewReferenceData] = useState({
+        firstName: "",
+        lastName: "",
+        position: "",
+        email: "",
+        phone: "",
+        status: ""
+        });
     
         const [isLoading, setIsLoading] = useState(false);
         const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
@@ -22,8 +20,8 @@ const StageExperienceInfo = () => {
     
         const onChange = (e) => {
             const { name, value } = e.target;
-            setNewExperienceData((prev) => ({
-                ...newExperienceData, [name]: value,
+            setNewReferenceData((prev) => ({
+                ...newReferenceData, [name]: value,
             }));
         };
     
@@ -33,13 +31,13 @@ const StageExperienceInfo = () => {
             setIsLoading(true);
             try {
                 // const response = await smt
-                console.log('Sending experience info:', newExperienceData);
-                if (newExperienceData) {
-                    navigate("/stage-certification-info");
-                    console.log('Successfully set experience info');
+                console.log('Sending reference info:', newReferenceData);
+                if (newReferenceData) {
+                    navigate("#");
+                    console.log('Successfully set reference info');
                 }
             }catch (error) {
-                console.error('Experience info error:', error);
+                console.error('Reference info error:', error);
             } finally {
                 setIsLoading(false);
             }
@@ -60,25 +58,19 @@ const StageExperienceInfo = () => {
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
-                    <h2>Stage 5</h2>
+                    <h2>Stage 7</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
-                        <h2>Experience info</h2>
+                        <h2>Reference info</h2>
                         <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
+                            <label htmlFor="firstName">First name:</label>
+                            <input type="text" id="firstName" name="firstName" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="organisation">Organisation:</label>
-                            <input type="text" id="organisation" name="organisation" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="type">Type:</label>
-                            <input id="type" name="type" onChange={onChange} />
+                            <label htmlFor="lastName">Last name:</label>
+                            <input type="text" id="lastName" name="lastName" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
@@ -87,34 +79,24 @@ const StageExperienceInfo = () => {
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
+                            <label htmlFor="email">Email:</label>
+                            <input type="email" id="email" name="email" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="startedAt">Started at:</label>
-                            <input type="date" id="startedAt" name="startedAt" onChange={onChange} />
+                            <label htmlFor="phone">Phone:</label>
+                            <input type="tel" id="phone" name="phone" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="endedAt">Ended at:</label>
-                            <input type="date" id="endedAt" name="endedAt" onChange={onChange} />
-                        </div>  
-
-                        <div className="input-group">
-                        <label htmlFor="active">Active:</label>
-                        <div className="radio-group">
-                            <input type="radio" id="active" name="active" value="active" onChange={onChange}/>
-                            <label htmlFor="active">Active</label>
-                            <input type="radio" id="non active" name="active" value="non active" onChange={onChange}/>
-                            <label htmlFor="non-active">Non active</label>
-                        </div>
+                            <label htmlFor="status">Status:</label>
+                            <input type="text" id="status" name="status" onChange={onChange} />
                         </div>
 
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-skills-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
-                        </div>
+                        </div> 
                     </form>
                 </div>
             </div>
@@ -130,4 +112,4 @@ const StageExperienceInfo = () => {
     );
 }
 
-export default StageExperienceInfo;
+export default StageReferenceInfo;

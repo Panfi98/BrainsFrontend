@@ -12,6 +12,7 @@ import StageProjectInfo from './Components/CVmaker/StageProjectInfo.jsx';
 import StageSkillsInfo from './Components/CVmaker/StageSkillsInfo.jsx';
 import StageExperienceInfo from './Components/CVmaker/StageExperienceInfo.jsx';
 import StageCertificationInfo from './Components/CVmaker/StageCertificationInfo.jsx';
+import StageReferenceInfo from './Components/CVmaker/StageReferenceInfo.jsx';
 import Profile from './Components/ProfilePage/Profile.jsx';
 import {SignUp} from "./Components/Authorization/SignUp.jsx";
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/stage-skills-info" element={<StageSkillsInfo />}/>
             <Route path="/stage-experience-info" element={<StageExperienceInfo />}/>
             <Route path="/stage-certification-info" element={<StageCertificationInfo />}/>
+            <Route path="/stage-reference-info" element={<StageReferenceInfo />}/>
         </Routes>
       </div>
     </AuthProvider>

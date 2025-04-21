@@ -3,42 +3,46 @@ import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './CVmaker.css';
+import { CreatePerson } from "../../Fetcher/CreatePerson.js";
 
 const StagePersonInfo = () => {
     const [newPersonData, setNewPersonData] = useState({
         firstName: "",
         lastName: "",
-        dateOfBirth: "",
         email: "",
-        phone: "",
+        phoneNumber: "",
         address: "",
-        photo: null,
+        birthday: "",
+        pictureURL: "",
+        summary: "",
+        status: "InProgress",
     });
 
     const [isLoading, setIsLoading] = useState(false);
     const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+    const {token} = useAuth();
     const navigate = useNavigate();
 
     const onChange = (e) => {
         const { name, value } = e.target;
         setNewPersonData((prev) => ({
-            ...newPersonData, [name]: value,
+            ...prev, [name]: value,
         }));
     };
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        if (!newPersonData.firstName || !newPersonData.lastName || !newPersonData.dateOfBirth || !newPersonData.email || !newPersonData.phone || !newPersonData.address || !newPersonData.photo) {
+        if (!newPersonData.firstName || !newPersonData.lastName || !newPersonData.birthday || !newPersonData.email || !newPersonData.phoneNumber || !newPersonData.address || !newPersonData.pictureURL) {
             alert('Please fill in all fields');
             return;
         }
 
         setIsLoading(true);
         try {
-            // const response = await smt
+            const response = await CreatePerson(newPersonData, token);
             console.log('Sending personal info:', newPersonData);
-            if (newPersonData) {
+            if (response.ok) {
                 navigate("/stage-education-info");
                 console.log('Successfully set personal info');
             }
@@ -59,6 +63,7 @@ const StagePersonInfo = () => {
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
@@ -70,37 +75,42 @@ const StagePersonInfo = () => {
                         <h2>Personal info</h2>
                         <div className="input-group">
                             <label htmlFor="firstName">First name:</label>
-                            <input type="text" id="firstName" name="firstName" onChange={onChange} />
+                            <input type="text" id="firstName" name="firstName" value={newPersonData.firstName} onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="lastName">Last name:</label>
-                            <input type="text" id="lastName" name="lastName" onChange={onChange} />
+                            <input type="text" id="lastName" name="lastName" value={newPersonData.lastName} onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="dateOfBirth">Date of birth:</label>
-                            <input type="date" id="dateOfBirth" name="dateOfBirth" onChange={onChange} />
+                            <label htmlFor="birthday">Date of birth:</label>
+                            <input type="date" id="birthday" name="birthday" value={newPersonData.birthday} onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="email">Email:</label>
-                            <input type="email" id="email" name="email" onChange={onChange} />
+                            <input type="email" id="email" name="email" value={newPersonData.email} onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="phone">Phone:</label>
-                            <input type="tel" id="phone" name="phone" onChange={onChange} />
+                            <label htmlFor="phoneNumber">Phone:</label>
+                            <input type="text" id="phoneNumber" name="phoneNumber" value={newPersonData.phoneNumber} onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="address">Address:</label>
-                            <input type="text" id="address" name="address" onChange={onChange}></input>
+                            <input type="text" id="address" name="address" value={newPersonData.address} onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="photo">Your photo:</label>
-                            <input type="file" id="photo" name="photo" onChange={onChange} />
+                            <label htmlFor="pictureURL">Your photo:</label>
+                            <input type="text" id="pictureURL" name="pictureURL" value={newPersonData.pictureURL} onChange={onChange} />
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="summary">About you:</label>
+                            <textarea id="summary" name="summary" value={newPersonData.summary} onChange={onChange} />
                         </div>
 
                         <div className="button-group">
