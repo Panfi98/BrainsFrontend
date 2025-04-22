@@ -1,6 +1,6 @@
 export async function CreatePerson(personData, token) {
     const { firstName, lastName, birthday, email, phoneNumber, address, pictureURL, summary } = personData;
-    
+
     const response = await fetch(import.meta.env.VITE_BRAIN_CREATE_PERSON_ENDPOINT, {
         method: "POST",
         headers: {
@@ -10,8 +10,16 @@ export async function CreatePerson(personData, token) {
         },
         body: JSON.stringify(personData)
     });
+
     if (!response.ok) {
-        return alert('Failed to create person');
+        console.error(`CreatePerson failed ${response.status}`, personData);
+        const err = new Error(
+            `CreatePerson failed (${response.status}): ${JSON.stringify(personData)}`
+        );
+        err.status = response.status;
+        err.payload = personData;
+        throw err;
     }
+
     return response;
 }

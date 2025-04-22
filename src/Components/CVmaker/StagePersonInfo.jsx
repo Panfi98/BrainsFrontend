@@ -32,21 +32,32 @@ const StagePersonInfo = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (!newPersonData.firstName || !newPersonData.lastName || !newPersonData.birthday || !newPersonData.email || !newPersonData.phoneNumber || !newPersonData.address || !newPersonData.pictureURL) {
             alert('Please fill in all fields');
             return;
         }
-
+    
+        const payload = {
+            firstName: newPersonData.firstName,
+            lastName: newPersonData.lastName,
+            birthday: newPersonData.birthday, // match your backend DTO
+            email: newPersonData.email,
+            phoneNumber: newPersonData.phoneNumber, // or whatever your API expects
+            address: newPersonData.address,
+            pictureUrl: newPersonData.pictureURL,
+            summary: newPersonData.summary,
+        };
+    
         setIsLoading(true);
         try {
-            const response = await CreatePerson(newPersonData, token);
-            console.log('Sending personal info:', newPersonData);
+            const response = await CreatePerson(payload, token);
+            console.log('Sending personal info:', payload);
             if (response.ok) {
                 navigate("/stage-education-info");
                 console.log('Successfully set personal info');
             }
-        }catch (error) {
+        } catch (error) {
             console.error('Personal info error:', error);
         } finally {
             setIsLoading(false);
