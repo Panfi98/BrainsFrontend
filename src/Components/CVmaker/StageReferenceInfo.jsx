@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddReference } from "../../Fetcher/AddReference.js";
 
 const StageReferenceInfo = () => {
     const [newReferenceData, setNewReferenceData] = useState({
@@ -10,17 +11,17 @@ const StageReferenceInfo = () => {
         lastName: "",
         position: "",
         email: "",
-        phone: "",
-        status: ""
+        phoneNumber: "",
+        status: "NotStarted",
         });
     
         const [isLoading, setIsLoading] = useState(false);
-        const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+        const { token } = useAuth();
         const navigate = useNavigate();
     
         const onChange = (e) => {
             const { name, value } = e.target;
-            setNewReferenceData((prev) => ({
+            setNewReferenceData((newReferenceData) => ({
                 ...newReferenceData, [name]: value,
             }));
         };
@@ -30,9 +31,9 @@ const StageReferenceInfo = () => {
     
             setIsLoading(true);
             try {
-                // const response = await smt
+                const response = await AddReference(newReferenceData, token);
                 console.log('Sending reference info:', newReferenceData);
-                if (newReferenceData) {
+                if (response.ok) {
                     navigate("#");
                     console.log('Successfully set reference info');
                 }
@@ -84,13 +85,8 @@ const StageReferenceInfo = () => {
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="phone">Phone:</label>
-                            <input type="tel" id="phone" name="phone" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="status">Status:</label>
-                            <input type="text" id="status" name="status" onChange={onChange} />
+                            <label htmlFor="phoneNumber">Phone:</label>
+                            <input type="text" id="phoneNumber" name="phoneNumber" onChange={onChange} />
                         </div>
 
                         <div className="button-group">

@@ -3,27 +3,29 @@ import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddEducation } from "../../Fetcher/AddEducation.js";
 
 const StageEducationInfo = () => {
 
     const [newEducationData, setNewEducationData] = useState({
         name: "",
         description: "",
-        startedAt: "",
-        endedAt: "",
+        startDate: "",
+        endDate: "",
         degree: "",
-        area: "",
+        type: "",
         place: "",
-        active: ""
+        active: "",
+        status: "InProgress",
     });
 
     const [isLoading, setIsLoading] = useState(false);
-    const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+    const { token } = useAuth();
     const navigate = useNavigate();
 
     const onChange = (e) => {
         const { name, value } = e.target;
-        setNewEducationData((prev) => ({
+        setNewEducationData((newEducationData) => ({
             ...newEducationData, [name]: value,
         }));
     };
@@ -31,13 +33,29 @@ const StageEducationInfo = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
+        const payload = {
+            name: newEducationData.name,
+            type: newEducationData.type,
+            startDate: newEducationData.startDate,
+            endDate: newEducationData.endDate,
+            description: newEducationData.description,
+            degree: newEducationData.degree,
+            place: newEducationData.place,
+            active: newEducationData.active === "true",
+            status: "NotStarted",
+        };
+    
         setIsLoading(true);
         try {
-            // const response = await smt
-            console.log('Sending education info:', newEducationData);
-            if (newEducationData) {
+            const response = await AddEducation(payload, token);
+            console.log("Sending education info:", payload);
+            if (response.ok) {
                 navigate("/stage-projects-info");
-                console.log('Successfully set education info');
+                console.log("Successfully set education info");
+            } else {
+                const errorDetails = await response.json();
+                console.error("AddEducation failed:", errorDetails);
+                alert(`Error: ${errorDetails.message || "Failed to add education info"}`);
             }
         }catch (error) {
             console.error('Education info error:', error);
@@ -77,13 +95,13 @@ const StageEducationInfo = () => {
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="startedAt">Started at:</label>
-                            <input type="date" id="startedAt" name="startedAt" onChange={onChange} />
+                            <label htmlFor="startDate">Started at:</label>
+                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="endedAt">Ended at:</label>
-                            <input type="date" id="endedAt" name="endedAt" onChange={onChange} />
+                            <label htmlFor="endDate">Ended at:</label>
+                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
@@ -97,8 +115,8 @@ const StageEducationInfo = () => {
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="area">Area:</label>
-                            <select id="area" name="area" onChange={onChange}>
+                            <label htmlFor="type">Type:</label>
+                            <select id="type" name="type" onChange={onChange}>
                                 <option value="none">None</option>
                                 <option value="economist">Economist</option>
                                 <option value="programist">Programist</option>
@@ -114,16 +132,16 @@ const StageEducationInfo = () => {
                         <div className="input-group">
                             <label htmlFor="active">Active:</label>
                             <div className="radio-group">
-                                <input type="radio" id="active" name="active" value="active" onChange={onChange} />
+                                <input type="radio" id="active" name="active" value="true" onChange={onChange} />
                                 <label htmlFor="active">Active</label>
-                                <input type="radio" id="non active" name="active" value="non active" onChange={onChange} />
+                                <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
                                 <label htmlFor="non-active">Not active</label>
                             </div>
                         </div>
                         
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
                         </div> 
                     </form>
                 </div>

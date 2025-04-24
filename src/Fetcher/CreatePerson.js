@@ -1,5 +1,5 @@
 export async function CreatePerson(personData, token) {
-    const { firstName, lastName, birthday, email, phoneNumber, address, pictureURL, summary } = personData;
+    const { firstName, lastName, birthday, email, phoneNumber, address, pictureURL, summary, status } = personData;
 
     const response = await fetch(import.meta.env.VITE_BRAIN_CREATE_PERSON_ENDPOINT, {
         method: "POST",

@@ -3,36 +3,46 @@ import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddProject } from "../../Fetcher/AddProject.js";
 
 const StageProjectInfo = () => {
     const [newProjectData, setNewProjectData] = useState({
         name: "",
         description: "",
-        startedAt: "",
-        complitedAt: "",
-        complited: "",
-        url: ""
+        startDate: "",
+        endDate: "",
+        completed: "",
+        status: "InProgress",
         });
     
         const [isLoading, setIsLoading] = useState(false);
-        const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+        const { token } = useAuth();
         const navigate = useNavigate();
     
         const onChange = (e) => {
             const { name, value } = e.target;
-            setNewProjectData((prev) => ({
+            setNewProjectData((newProjectData) => ({
                 ...newProjectData, [name]: value,
             }));
         };
     
         const onSubmit = async (e) => {
             e.preventDefault();
+
+            const payload = {
+                name: newProjectData.name,
+                description: newProjectData.description,
+                startDate: new Date(newProjectData.startDate).toISOString(), // Преобразование в ISO 8601
+                endDate: new Date(newProjectData.endDate).toISOString(),
+                completed: newProjectData.completed === "true",
+                status: "NotStarted",
+            };
     
             setIsLoading(true);
             try {
-                // const response = await smt
-                console.log('Sending project info:', newProjectData);
-                if (newProjectData) {
+                const response = await AddProject(payload, token);
+                console.log('Sending project info:', payload);
+                if (response.ok) {
                     navigate("/stage-skills-info");
                     console.log('Successfully set project info');
                 }
@@ -74,28 +84,23 @@ const StageProjectInfo = () => {
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="startedAt">Started at:</label>
-                            <input type="date" id="startedAt" name="startedAt" onChange={onChange} />
+                            <label htmlFor="startDate">Started at:</label>
+                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="complitedAt">Complited at:</label>
-                            <input type="date" id="complitedAt" name="complitedAt" onChange={onChange} />
+                            <label htmlFor="endDate">Complited at:</label>
+                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="complited">Complited:</label>
+                            <label htmlFor="completed">Completed:</label>
                             <div className="radio-group">
-                                <input type="radio" id="complited" name="complited" value="complited" onChange={onChange} />
-                                <label htmlFor="complited">Complited</label>
-                                <input type="radio" id="non complited" name="complited" value="non complited" onChange={onChange} />
-                                <label htmlFor="non-complited">Non complited</label>
+                                <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
+                                <label htmlFor="completed">Completed</label>
+                                <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
+                                <label htmlFor="non-completed">Non completed</label>
                             </div>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="url">Url:</label>
-                            <input type="url" id="url" name="url" onChange={onChange} />
                         </div>
 
                         <div className="button-group">

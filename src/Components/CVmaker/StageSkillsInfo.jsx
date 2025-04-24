@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddSkills } from "../../Fetcher/AddSkills.js";
 
 const StageSkillsInfo = () => {
     const [newSkillsData, setNewSkillsData] = useState({
@@ -10,27 +11,36 @@ const StageSkillsInfo = () => {
         description: "",
         type: "",
         level: "",
+        status: "InProgress",
         });
     
         const [isLoading, setIsLoading] = useState(false);
-        const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+        const { token } = useAuth();
         const navigate = useNavigate();
     
         const onChange = (e) => {
             const { name, value } = e.target;
-            setNewSkillsData((prev) => ({
+            setNewSkillsData((newSkillsData) => ({
                 ...newSkillsData, [name]: value,
             }));
         };
     
         const onSubmit = async (e) => {
             e.preventDefault();
+
+            const payload = {
+                name: newSkillsData.name,
+                description: newSkillsData.description,
+                type: newSkillsData.type,
+                level: newSkillsData.level,
+                status: "NotStarted",
+            };
     
             setIsLoading(true);
             try {
-                // const response = await smt
-                console.log('Sending skills info:', newSkillsData);
-                if (newSkillsData) {
+                const response = await AddSkills(payload, token);
+                console.log('Sending skills info:', payload);
+                if (response.ok) {
                     navigate("/stage-experience-info");
                     console.log('Successfully set skills info');
                 }
@@ -80,10 +90,10 @@ const StageSkillsInfo = () => {
                         <div className="input-group">
                             <label htmlFor="level">Level:</label>
                             <select id="level" name="level" onChange={onChange}>
-                                <option value="none">None</option>
-                                <option value="begynner">Begynner</option>
-                                <option value="intermediater">Intermediater</option>
-                                <option value="apper-intermidiater">Apper Intermidiater</option>
+                                <option value="0">None</option>
+                                <option value="1">Begynner</option>
+                                <option value="2">Intermediater</option>
+                                <option value="3">Apper Intermidiater</option>
                             </select>
                         </div>
 

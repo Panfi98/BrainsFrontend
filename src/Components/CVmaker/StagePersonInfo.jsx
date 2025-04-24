@@ -19,14 +19,13 @@ const StagePersonInfo = () => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
-    const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
     const {token} = useAuth();
     const navigate = useNavigate();
 
     const onChange = (e) => {
         const { name, value } = e.target;
-        setNewPersonData((prev) => ({
-            ...prev, [name]: value,
+        setNewPersonData((newPersonData) => ({
+            ...newPersonData, [name]: value,
         }));
     };
 
@@ -37,22 +36,11 @@ const StagePersonInfo = () => {
             alert('Please fill in all fields');
             return;
         }
-    
-        const payload = {
-            firstName: newPersonData.firstName,
-            lastName: newPersonData.lastName,
-            birthday: newPersonData.birthday, // match your backend DTO
-            email: newPersonData.email,
-            phoneNumber: newPersonData.phoneNumber, // or whatever your API expects
-            address: newPersonData.address,
-            pictureUrl: newPersonData.pictureURL,
-            summary: newPersonData.summary,
-        };
-    
+
         setIsLoading(true);
         try {
-            const response = await CreatePerson(payload, token);
-            console.log('Sending personal info:', payload);
+            const response = await CreatePerson(newPersonData, token);
+            console.log('Sending personal info:', newPersonData);
             if (response.ok) {
                 navigate("/stage-education-info");
                 console.log('Successfully set personal info');
@@ -86,42 +74,42 @@ const StagePersonInfo = () => {
                         <h2>Personal info</h2>
                         <div className="input-group">
                             <label htmlFor="firstName">First name:</label>
-                            <input type="text" id="firstName" name="firstName" value={newPersonData.firstName} onChange={onChange} />
+                            <input type="text" id="firstName" name="firstName" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="lastName">Last name:</label>
-                            <input type="text" id="lastName" name="lastName" value={newPersonData.lastName} onChange={onChange} />
+                            <input type="text" id="lastName" name="lastName" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="birthday">Date of birth:</label>
-                            <input type="date" id="birthday" name="birthday" value={newPersonData.birthday} onChange={onChange} />
+                            <input type="date" id="birthday" name="birthday" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="email">Email:</label>
-                            <input type="email" id="email" name="email" value={newPersonData.email} onChange={onChange} />
+                            <input type="email" id="email" name="email" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="phoneNumber">Phone:</label>
-                            <input type="text" id="phoneNumber" name="phoneNumber" value={newPersonData.phoneNumber} onChange={onChange} />
+                            <input type="text" id="phoneNumber" name="phoneNumber" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="address">Address:</label>
-                            <input type="text" id="address" name="address" value={newPersonData.address} onChange={onChange} />
+                            <input type="text" id="address" name="address" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="pictureURL">Your photo:</label>
-                            <input type="text" id="pictureURL" name="pictureURL" value={newPersonData.pictureURL} onChange={onChange} />
+                            <input type="text" id="pictureURL" name="pictureURL" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="summary">About you:</label>
-                            <textarea id="summary" name="summary" value={newPersonData.summary} onChange={onChange} />
+                            <textarea id="summary" name="summary" onChange={onChange} />
                         </div>
 
                         <div className="button-group">

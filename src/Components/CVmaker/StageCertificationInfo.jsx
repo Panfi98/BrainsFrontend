@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddCertification } from "../../Fetcher/AddCertification.js";
 
 const StageCertificationInfo = () => {
     const [newCertificationData, setNewCertificationData] = useState({
@@ -11,28 +12,39 @@ const StageCertificationInfo = () => {
         date: "",
         url: "",
         type: "",
-        validTo: ""
+        validTo: "",
+        status: "InProgress",
         });
-        
+
             const [isLoading, setIsLoading] = useState(false);
-            const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+            const { token } = useAuth();
             const navigate = useNavigate();
         
             const onChange = (e) => {
                 const { name, value } = e.target;
-                setNewCertificationData((prev) => ({
+                setNewCertificationData((newCertificationData) => ({
                     ...newCertificationData, [name]: value,
                 }));
             };
         
             const onSubmit = async (e) => {
                 e.preventDefault();
+
+                const payload = {
+                    name: newCertificationData.name,
+                    description: newCertificationData.description,
+                    date: new Date(newCertificationData.date).toISOString(), // Преобразование в ISO 8601
+                    url: newCertificationData.url,
+                    type: newCertificationData.type,
+                    validTo: new Date(newCertificationData.validTo).toISOString(), // Преобразование в ISO 8601
+                    status: "NotStarted",
+                };
         
                 setIsLoading(true);
                 try {
-                    // const response = await smt
-                    console.log('Sending certification info:', newCertificationData);
-                    if (newCertificationData) {
+                    const response = await AddCertification(payload, token);
+                    console.log('Sending certification info:', payload);
+                    if (response.ok) {
                         navigate("/stage-reference-info");
                         console.log('Successfully set certification info');
                     }

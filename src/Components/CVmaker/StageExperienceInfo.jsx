@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddExperience } from "../../Fetcher/AddExperience.js";
 
 const StageExperienceInfo = () => {
     const [newExperienceData, setNewExperienceData] = useState({
@@ -13,37 +14,54 @@ const StageExperienceInfo = () => {
         active: "",
         type: "",
         organisation: "",
-        position: ""
+        position: "",
+        status: "InProgress",
         }); 
     
         const [isLoading, setIsLoading] = useState(false);
-        const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+        const { token } = useAuth();
         const navigate = useNavigate();
     
         const onChange = (e) => {
             const { name, value } = e.target;
-            setNewExperienceData((prev) => ({
+            setNewExperienceData((newExperienceData) => ({
                 ...newExperienceData, [name]: value,
             }));
         };
     
         const onSubmit = async (e) => {
-            e.preventDefault();
-    
-            setIsLoading(true);
-            try {
-                // const response = await smt
-                console.log('Sending experience info:', newExperienceData);
-                if (newExperienceData) {
-                    navigate("/stage-certification-info");
-                    console.log('Successfully set experience info');
+                e.preventDefault();
+        
+                const payload = {
+                    name: newExperienceData.name,
+                    type: newExperienceData.type,
+                    startedAt: new Date(newExperienceData.startedAt).toISOString(), // Преобразование в ISO 8601
+                    endedAt: new Date(newExperienceData.endedAt).toISOString(), 
+                    description: newExperienceData.description,
+                    organisation: newExperienceData.organisation,
+                    position: newExperienceData.position,
+                    active: newExperienceData.active === "true",
+                    status: "NotStarted",
+                };
+            
+                setIsLoading(true);
+                try {
+                    const response = await AddExperience(payload, token);
+                    console.log("Sending experience info:", payload);
+                    if (response.ok) {
+                        navigate("/stage-certification-info");
+                        console.log("Successfully set experience info");
+                    } else {
+                        const errorDetails = await response.json();
+                        console.error("AddExperience failed:", errorDetails);
+                        alert(`Error: ${errorDetails.message || "Failed to add experience info"}`);
+                    }
+                }catch (error) {
+                    console.error('Experience info error:', error);
+                } finally {
+                    setIsLoading(false);
                 }
-            }catch (error) {
-                console.error('Experience info error:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+            };
 
     return(
         <div className="cv-maker-container">
