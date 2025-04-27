@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddCertification } from "../../Fetcher/AddCertification.js";
@@ -18,6 +19,7 @@ const StageCertificationInfo = () => {
 
             const [isLoading, setIsLoading] = useState(false);
             const { token } = useAuth();
+            const { resumeData } = useResume();
             const navigate = useNavigate();
         
             const onChange = (e) => {
@@ -29,6 +31,11 @@ const StageCertificationInfo = () => {
         
             const onSubmit = async (e) => {
                 e.preventDefault();
+
+                if (!resumeData) {
+                    alert("Resume ID is missing. Please complete the previous step.");
+                    return;
+                }
 
                 const payload = {
                     name: newCertificationData.name,
@@ -42,7 +49,7 @@ const StageCertificationInfo = () => {
         
                 setIsLoading(true);
                 try {
-                    const response = await AddCertification(payload, token);
+                    const response = await AddCertification(payload, token, resumeData.id);
                     console.log('Sending certification info:', payload);
                     if (response.ok) {
                         navigate("/stage-reference-info");

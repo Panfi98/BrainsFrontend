@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddReference } from "../../Fetcher/AddReference.js";
@@ -17,6 +18,7 @@ const StageReferenceInfo = () => {
     
         const [isLoading, setIsLoading] = useState(false);
         const { token } = useAuth();
+        const { resumeData } = useResume();
         const navigate = useNavigate();
     
         const onChange = (e) => {
@@ -31,7 +33,7 @@ const StageReferenceInfo = () => {
     
             setIsLoading(true);
             try {
-                const response = await AddReference(newReferenceData, token);
+                const response = await AddReference(newReferenceData, token, resumeData.id);
                 console.log('Sending reference info:', newReferenceData);
                 if (response.ok) {
                     navigate("#");

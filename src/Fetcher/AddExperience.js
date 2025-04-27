@@ -1,7 +1,8 @@
-export async function AddExperience(experiencenData, token) {
+export async function AddExperience(experiencenData, token, resumeId) {
     const {name, description, startedAt, endedAt, type, organisation, position, active, status} = experiencenData;
     
-    const response = await fetch(import.meta.env.VITE_BRAIN_ADD_EXPERIENCE_ENDPOINT, {
+    const url = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}/experience`;
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             'accept': '*/*',

@@ -1,7 +1,8 @@
-export async function AddCertification(certificationData, token) {
+export async function AddCertification(certificationData, token, resumeId) {
     const {name, description, date, url, type, validTo, status} = certificationData;
 
-    const response = await fetch(import.meta.env.VITE_BRAIN_ADD_CERTIFICATION_ENDPOINT, {
+    const fetchUrl = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}/certification`;
+    const response = await fetch(fetchUrl, {
         method: "POST",
         headers: {
             'accept': '*/*',

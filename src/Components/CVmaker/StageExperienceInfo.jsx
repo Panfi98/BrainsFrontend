@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddExperience } from "../../Fetcher/AddExperience.js";
@@ -20,6 +21,7 @@ const StageExperienceInfo = () => {
     
         const [isLoading, setIsLoading] = useState(false);
         const { token } = useAuth();
+        const { resumeData } = useResume();
         const navigate = useNavigate();
     
         const onChange = (e) => {
@@ -46,7 +48,7 @@ const StageExperienceInfo = () => {
             
                 setIsLoading(true);
                 try {
-                    const response = await AddExperience(payload, token);
+                    const response = await AddExperience(payload, token, resumeData.id);
                     console.log("Sending experience info:", payload);
                     if (response.ok) {
                         navigate("/stage-certification-info");

@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './CVmaker.css';
@@ -20,6 +21,8 @@ const StagePersonInfo = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const {token} = useAuth();
+    const { resumeData, setResumeData } = useResume();
+
     const navigate = useNavigate();
 
     const onChange = (e) => {
@@ -42,6 +45,11 @@ const StagePersonInfo = () => {
             const response = await CreatePerson(newPersonData, token);
             console.log('Sending personal info:', newPersonData);
             if (response.ok) {
+                const responceData = await response.json();
+                const resumeId = responceData.data.id;
+                console.log('Response:', responceData, resumeId);
+                setResumeData({id: resumeId});
+                console.log('Resume ID:', resumeData.id);
                 navigate("/stage-education-info");
                 console.log('Successfully set personal info');
             }

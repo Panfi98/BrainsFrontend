@@ -1,7 +1,8 @@
-export async function AddReference(referenceData, token) {
+export async function AddReference(referenceData, token, resumeId) {
     const { firstName, lastName, email, phoneNumber, position, status } = referenceData;
     
-    const response = await fetch(import.meta.env.VITE_BRAIN_ADD_REFERENCE_ENDPOINT, {
+    const url = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}/reference`;
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             'accept': '*/*',

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddEducation } from "../../Fetcher/AddEducation.js";
@@ -21,6 +22,7 @@ const StageEducationInfo = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
+    const { resumeData } = useResume();
     const navigate = useNavigate();
 
     const onChange = (e) => {
@@ -33,11 +35,16 @@ const StageEducationInfo = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
+        if (!resumeData) {
+            alert("Resume ID is missing. Please complete the previous step.");
+            return;
+        }
+
         const payload = {
             name: newEducationData.name,
             type: newEducationData.type,
-            startDate: newEducationData.startDate,
-            endDate: newEducationData.endDate,
+            startDate: new Date(newEducationData.startDate).toISOString(),
+            endDate: new Date(newEducationData.endDate).toISOString(),
             description: newEducationData.description,
             degree: newEducationData.degree,
             place: newEducationData.place,
@@ -47,7 +54,7 @@ const StageEducationInfo = () => {
     
         setIsLoading(true);
         try {
-            const response = await AddEducation(payload, token);
+            const response = await AddEducation(payload, token, resumeData.id);
             console.log("Sending education info:", payload);
             if (response.ok) {
                 navigate("/stage-projects-info");

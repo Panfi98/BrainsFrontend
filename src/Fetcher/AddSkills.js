@@ -1,7 +1,8 @@
-export async function AddSkills(skillsData, token) {
+export async function AddSkills(skillsData, token, resumeId) {
     const {name, description, type, level, status} = skillsData;
     
-    const response = await fetch(import.meta.env.VITE_BRAIN_ADD_SKILLS_ENDPOINT, {
+    const url = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}/skill`;
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             'accept': '*/*',

@@ -1,7 +1,8 @@
-export async function AddEducation(educationData, token) {
+export async function AddEducation(educationData, token, resumeId) {
     const { name, description, startDate, endDate, degree, type, place, active, status } = educationData;
 
-    const response = await fetch(import.meta.env.VITE_BRAIN_ADD_EDUCATION_ENDPOINT, {
+    const url = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}/education`;
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             'accept': '*/*',

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddProject } from "../../Fetcher/AddProject.js";
@@ -17,6 +18,7 @@ const StageProjectInfo = () => {
     
         const [isLoading, setIsLoading] = useState(false);
         const { token } = useAuth();
+        const { resumeData } = useResume();
         const navigate = useNavigate();
     
         const onChange = (e) => {
@@ -40,7 +42,7 @@ const StageProjectInfo = () => {
     
             setIsLoading(true);
             try {
-                const response = await AddProject(payload, token);
+                const response = await AddProject(payload, token, resumeData.id);
                 console.log('Sending project info:', payload);
                 if (response.ok) {
                     navigate("/stage-skills-info");

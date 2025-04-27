@@ -1,7 +1,8 @@
-export async function AddProject(projectData, token) {
+export async function AddProject(projectData, token, resumeId) {
     const { name, description, startDate, endDate, completed, status } = projectData;
     
-    const response = await fetch(import.meta.env.VITE_BRAIN_ADD_PROJECT_ENDPOINT, {
+    const url = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}/project`;
+    const response = await fetch(url, {
         method: "POST",
         headers: {
             'accept': '*/*',
