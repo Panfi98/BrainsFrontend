@@ -1,5 +1,6 @@
 import './App.css'
 import {Login} from "./Components/Authorization/Login.jsx";
+import {SignUp} from "./Components/Authorization/SignUp.jsx";
 import {AuthProvider} from "./Context/AuthContext.jsx";
 import { ResumeProvider } from './Context/ResumeContext.jsx';
 import {Routes,Route,useLocation} from 'react-router-dom';
@@ -14,8 +15,8 @@ import StageSkillsInfo from './Components/CVmaker/StageSkillsInfo.jsx';
 import StageExperienceInfo from './Components/CVmaker/StageExperienceInfo.jsx';
 import StageCertificationInfo from './Components/CVmaker/StageCertificationInfo.jsx';
 import StageReferenceInfo from './Components/CVmaker/StageReferenceInfo.jsx';
+import CvPage from "./Components/CvPage/CvPage.jsx"
 import Profile from './Components/ProfilePage/Profile.jsx';
-import {SignUp} from "./Components/Authorization/SignUp.jsx";
 
 function App() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
               <Route path="/stage-experience-info" element={<StageExperienceInfo />}/>
               <Route path="/stage-certification-info" element={<StageCertificationInfo />}/>
               <Route path="/stage-reference-info" element={<StageReferenceInfo />}/>
+              <Route path="/Cv" element={<CvPage/>}/>
           </Routes>
         </div>
       </ResumeProvider>

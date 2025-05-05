@@ -46,10 +46,13 @@ const StagePersonInfo = () => {
             console.log('Sending personal info:', newPersonData);
             if (response.ok) {
                 const responceData = await response.json();
+                
                 const resumeId = responceData.data.id;
                 console.log('Response:', responceData, resumeId);
+                
                 setResumeData({id: resumeId});
-                console.log('Resume ID:', resumeData.id);
+                console.log('Resume ID:', resumeData);
+                
                 navigate("/stage-education-info");
                 console.log('Successfully set personal info');
             }

@@ -7,7 +7,7 @@ export function useResume() {
 }
 
 export function ResumeProvider(props){
-    const [resumeData, setResumeData] = useState();
+    const [resumeData, setResumeData] = useState({});
 
     const value = {
         resumeData,

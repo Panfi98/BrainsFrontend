@@ -36,7 +36,7 @@ const StageReferenceInfo = () => {
                 const response = await AddReference(newReferenceData, token, resumeData.id);
                 console.log('Sending reference info:', newReferenceData);
                 if (response.ok) {
-                    navigate("#");
+                    navigate("/Cv");
                     console.log('Successfully set reference info');
                 }
             }catch (error) {
@@ -92,7 +92,7 @@ const StageReferenceInfo = () => {
                         </div>
 
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate("/stage-certification-info")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
                         </div> 
                     </form>
