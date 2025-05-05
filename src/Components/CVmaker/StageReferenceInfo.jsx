@@ -15,43 +15,52 @@ const StageReferenceInfo = () => {
         phoneNumber: "",
         status: "NotStarted",
         });
-    
-        const [isLoading, setIsLoading] = useState(false);
-        const { token } = useAuth();
-        const { resumeData } = useResume();
-        const navigate = useNavigate();
-    
-        const onChange = (e) => {
-            const { name, value } = e.target;
-            setNewReferenceData((newReferenceData) => ({
-                ...newReferenceData, [name]: value,
-            }));
-        };
-    
-        const onSubmit = async (e) => {
-            e.preventDefault();
-    
-            setIsLoading(true);
-            try {
-                const response = await AddReference(newReferenceData, token, resumeData.id);
-                console.log('Sending reference info:', newReferenceData);
-                if (response.ok) {
-                    navigate("/Cv");
-                    console.log('Successfully set reference info');
-                }
-            }catch (error) {
-                console.error('Reference info error:', error);
-            } finally {
-                setIsLoading(false);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const { token } = useAuth();
+    const { resumeData } = useResume(); // Assuming resumeData contains the id
+    const navigate = useNavigate();
+
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setNewReferenceData((newReferenceData) => ({
+            ...newReferenceData, [name]: value,
+        }));
+    };
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!resumeData || !resumeData.id) {
+            console.error('Resume ID is missing. Cannot navigate.');
+            // Handle the error appropriately, maybe show a message to the user
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await AddReference(newReferenceData, token, resumeData.id);
+            console.log('Sending reference info:', newReferenceData);
+
+            if (response) {
+                navigate(`/cv/${resumeData.id}`);
+                console.log('Successfully set reference info');
+            } else {
+                console.error('Failed to add reference info:', response);
             }
-        };
+        }catch (error) {
+            console.error('Reference info error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return(
         <div className="cv-maker-container">
             <div className="progress-bar">
                 <p>CV progress</p>
                 <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>    
+                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-projects-info")}>Project info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
@@ -64,50 +73,53 @@ const StageReferenceInfo = () => {
                     <h2>Stage 7</h2>
                 </div>
                 <div className="cv-form">
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <h2>Reference info</h2>
                         <div className="input-group">
                             <label htmlFor="firstName">First name:</label>
-                            <input type="text" id="firstName" name="firstName" onChange={onChange} />
+                            <input type="text" id="firstName" name="firstName" onChange={onChange} value={newReferenceData.firstName} required /> {/* Added value and required */}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="lastName">Last name:</label>
-                            <input type="text" id="lastName" name="lastName" onChange={onChange} />
+                            <input type="text" id="lastName" name="lastName" onChange={onChange} value={newReferenceData.lastName} required /> {/* Added value and required */}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="position">Position:</label>
-                            <input id="position" name="position" onChange={onChange} />
+                            <input id="position" name="position" onChange={onChange} value={newReferenceData.position} required /> {/* Added value and required */}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="email">Email:</label>
-                            <input type="email" id="email" name="email" onChange={onChange} />
+                            <input type="email" id="email" name="email" onChange={onChange} value={newReferenceData.email} required /> {/* Added value and required */}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="phoneNumber">Phone:</label>
-                            <input type="text" id="phoneNumber" name="phoneNumber" onChange={onChange} />
+                            <input type="tel" id="phoneNumber" name="phoneNumber" onChange={onChange} value={newReferenceData.phoneNumber} required /> {/* Changed type to tel, added value and required */}
                         </div>
 
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-certification-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
-                        </div> 
+                            <button type="submit" className="next-btn" disabled={isLoading}>
+                                {isLoading ? 'Saving...' : 'Finish'} {/* Changed text and added disabled state */}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
             <div className="cv-tips">
-            <p>Tips</p>
-            <ul>
-                <li>Make sure to include all relevant certifications.</li>
-                <li>Double-check the dates and URLs for accuracy.</li>
-                <li>Keep your descriptions concise and to the point.</li>
-            </ul>
+                <p>Tips</p>
+                <ul>
+                    <li>Provide professional references who can speak to your skills and experience.</li>
+                    <li>Inform your references beforehand that they might be contacted.</li>
+                    <li>Ensure contact information is accurate and up-to-date.</li>
+                </ul>
             </div>
         </div>
     );
 }
+
 
 export default StageReferenceInfo;
