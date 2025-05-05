@@ -1,11 +1,67 @@
 import React from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import './CVmaker.css';
+import { CreatePerson } from "../../Fetcher/CreatePerson.js";
 
 const StagePersonInfo = () => {
-    const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
+    const [newPersonData, setNewPersonData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        address: "",
+        birthday: "",
+        pictureURL: "",
+        summary: "",
+        status: "InProgress",
+    });
+
+    const [isLoading, setIsLoading] = useState(false);
+    const {token} = useAuth();
+    const { resumeData, setResumeData } = useResume();
+
     const navigate = useNavigate();
+
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setNewPersonData((newPersonData) => ({
+            ...newPersonData, [name]: value,
+        }));
+    };
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!newPersonData.firstName || !newPersonData.lastName || !newPersonData.birthday || !newPersonData.email || !newPersonData.phoneNumber || !newPersonData.address || !newPersonData.pictureURL) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await CreatePerson(newPersonData, token);
+            console.log('Sending personal info:', newPersonData);
+            if (response.ok) {
+                const responceData = await response.json();
+                
+                const resumeId = responceData.data.id;
+                console.log('Response:', responceData, resumeId);
+                
+                setResumeData({id: resumeId});
+                console.log('Resume ID:', resumeData);
+                
+                navigate("/stage-education-info");
+                console.log('Successfully set personal info');
+            }
+        } catch (error) {
+            console.error('Personal info error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="cv-maker-container">
@@ -17,6 +73,7 @@ const StagePersonInfo = () => {
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
@@ -28,37 +85,47 @@ const StagePersonInfo = () => {
                         <h2>Personal info</h2>
                         <div className="input-group">
                             <label htmlFor="firstName">First name:</label>
-                            <input type="text" id="firstName" name="firstName" required />
+                            <input type="text" id="firstName" name="firstName" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="lastName">Last name:</label>
-                            <input type="text" id="lastName" name="lastName" required />
+                            <input type="text" id="lastName" name="lastName" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="dateOfBirth">Date of birth:</label>
-                            <input type="date" id="dateOfBirth" name="dateOfBirth" required />
+                            <label htmlFor="birthday">Date of birth:</label>
+                            <input type="date" id="birthday" name="birthday" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="email">Email:</label>
-                            <input type="email" id="email" name="email" required />
+                            <input type="email" id="email" name="email" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="phone">Phone:</label>
-                            <input type="tel" id="phone" name="phone" required />
+                            <label htmlFor="phoneNumber">Phone:</label>
+                            <input type="text" id="phoneNumber" name="phoneNumber" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="address">Address:</label>
-                            <input type="text" id="address" name="address" required></input>
+                            <input type="text" id="address" name="address" onChange={onChange} />
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="pictureURL">Your photo:</label>
+                            <input type="text" id="pictureURL" name="pictureURL" onChange={onChange} />
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="summary">About you:</label>
+                            <textarea id="summary" name="summary" onChange={onChange} />
                         </div>
 
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/your-applications")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={() => navigate("/stage-education-info")} className="next-btn">Next stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
                         </div> 
 
                     </form>

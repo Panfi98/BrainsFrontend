@@ -11,7 +11,7 @@ const FirstPage = () => {
         <div className="first-page-header">
             <h1>Home</h1>
             <div className="header-buttons">
-                <button onClick={() => navigate('#')}>Sigh up</button>
+                <button onClick={() => navigate('/signup')}>Sigh up</button>
                 <button onClick={() => navigate('/login')}>Login</button>
             </div>
         </div>

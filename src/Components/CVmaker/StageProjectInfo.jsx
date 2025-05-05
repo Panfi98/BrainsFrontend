@@ -1,11 +1,59 @@
 import React from "react";
+import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddProject } from "../../Fetcher/AddProject.js";
 
 const StageProjectInfo = () => {
-    const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
-    const navigate = useNavigate();
+    const [newProjectData, setNewProjectData] = useState({
+        name: "",
+        description: "",
+        startDate: "",
+        endDate: "",
+        completed: "",
+        status: "InProgress",
+        });
+    
+        const [isLoading, setIsLoading] = useState(false);
+        const { token } = useAuth();
+        const { resumeData } = useResume();
+        const navigate = useNavigate();
+    
+        const onChange = (e) => {
+            const { name, value } = e.target;
+            setNewProjectData((newProjectData) => ({
+                ...newProjectData, [name]: value,
+            }));
+        };
+    
+        const onSubmit = async (e) => {
+            e.preventDefault();
+
+            const payload = {
+                name: newProjectData.name,
+                description: newProjectData.description,
+                startDate: new Date(newProjectData.startDate).toISOString(), // Преобразование в ISO 8601
+                endDate: new Date(newProjectData.endDate).toISOString(),
+                completed: newProjectData.completed === "true",
+                status: "NotStarted",
+            };
+    
+            setIsLoading(true);
+            try {
+                const response = await AddProject(payload, token, resumeData.id);
+                console.log('Sending project info:', payload);
+                if (response.ok) {
+                    navigate("/stage-skills-info");
+                    console.log('Successfully set project info');
+                }
+            }catch (error) {
+                console.error('Project info error:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
     return(
         <div className="cv-maker-container">
@@ -17,54 +65,49 @@ const StageProjectInfo = () => {
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
                     <h2>Stage 3</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
                         <h2>Project info</h2>
                         <div className="input-group">
                             <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" required />
+                            <input type="text" id="name" name="name" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="description">Description:</label>
-                            <input type="text" id="description" name="description" required />
+                            <textarea id="description" name="description" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="startedAt">Started at:</label>
-                            <input type="date" id="startedAt" name="startedAt" required />
+                            <label htmlFor="startDate">Started at:</label>
+                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="complitedAt">Complited at:</label>
-                            <input type="date" id="complitedAt" name="complitedAt" required />
+                            <label htmlFor="endDate">Complited at:</label>
+                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
                         </div>
 
                         <div className="input-group">
-                            <label htmlFor="complited">Complited:</label>
+                            <label htmlFor="completed">Completed:</label>
                             <div className="radio-group">
-                                <input type="radio" id="complited" name="complited" value="complited" />
-                                <label htmlFor="complited">Complited</label>
-                                <input type="radio" id="non complited" name="complited" value="non complited" />
-                                <label htmlFor="non-complited">Non complited</label>
+                                <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
+                                <label htmlFor="completed">Completed</label>
+                                <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
+                                <label htmlFor="non-completed">Non completed</label>
                             </div>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="url">Url:</label>
-                            <input type="url" id="url" name="url" required />
                         </div>
 
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={() => navigate("/stage-skills-info")} className="next-btn">Next stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
                         </div> 
                     </form>
                 </div>

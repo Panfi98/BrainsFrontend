@@ -1,12 +1,67 @@
 import React from "react";
+import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
+import { AddCertification } from "../../Fetcher/AddCertification.js";
 
 const StageCertificationInfo = () => {
-    const { isLoggedIn, userData, setIsLoggedIn, setToken } = useAuth();
-    const navigate = useNavigate();
-    
+    const [newCertificationData, setNewCertificationData] = useState({
+        name: "",
+        description: "",
+        date: "",
+        url: "",
+        type: "",
+        validTo: "",
+        status: "InProgress",
+        });
+
+            const [isLoading, setIsLoading] = useState(false);
+            const { token } = useAuth();
+            const { resumeData } = useResume();
+            const navigate = useNavigate();
+        
+            const onChange = (e) => {
+                const { name, value } = e.target;
+                setNewCertificationData((newCertificationData) => ({
+                    ...newCertificationData, [name]: value,
+                }));
+            };
+        
+            const onSubmit = async (e) => {
+                e.preventDefault();
+
+                if (!resumeData) {
+                    alert("Resume ID is missing. Please complete the previous step.");
+                    return;
+                }
+
+                const payload = {
+                    name: newCertificationData.name,
+                    description: newCertificationData.description,
+                    date: new Date(newCertificationData.date).toISOString(), // Преобразование в ISO 8601
+                    url: newCertificationData.url,
+                    type: newCertificationData.type,
+                    validTo: new Date(newCertificationData.validTo).toISOString(), // Преобразование в ISO 8601
+                    status: "NotStarted",
+                };
+        
+                setIsLoading(true);
+                try {
+                    const response = await AddCertification(payload, token, resumeData.id);
+                    console.log('Sending certification info:', payload);
+                    if (response.ok) {
+                        navigate("/stage-reference-info");
+                        console.log('Successfully set certification info');
+                    }
+                }catch (error) {
+                    console.error('Certification info error:', error);
+                } finally {
+                    setIsLoading(false);
+                }
+    };
+
     return(
         <div className="cv-maker-container">
             <div className="progress-bar">
@@ -17,6 +72,7 @@ const StageCertificationInfo = () => {
                 <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
                 <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
@@ -28,37 +84,37 @@ const StageCertificationInfo = () => {
                         <h2>Certification info</h2>
                         <div className="input-group">
                             <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" required />
+                            <input type="text" id="name" name="name" onChange={onChange} />
                         </div>
     
                         <div className="input-group">
                             <label htmlFor="description">Description:</label>
-                            <input type="text" id="description" name="description" required />
+                            <textarea id="description" name="description" onChange={onChange} />
                         </div>
     
                         <div className="input-group">
                             <label htmlFor="date">Date:</label>
-                            <input type="date" id="date" name="date" required />
+                            <input type="date" id="date" name="date" onChange={onChange} />
                         </div>
     
                         <div className="input-group">
                             <label htmlFor="url">Url:</label>
-                            <input type="url" id="url" name="url" required />
+                            <input type="url" id="url" name="url" onChange={onChange} />
                         </div>
     
                         <div className="input-group">
                             <label htmlFor="type">Type:</label>
-                            <input id="type" name="type" required />
+                            <input id="type" name="type" onChange={onChange} />
                         </div>
     
                         <div className="input-group">
                             <label htmlFor="validTo">Valid to:</label>
-                            <input type="date" id="validTo" name="validTo" required></input>
+                            <input type="date" id="validTo" name="validTo" onChange={onChange}></input>
                         </div>
     
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-experience-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={() => navigate("#")} className="next-btn">Next stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
                         </div>
                     </form>
                 </div>
