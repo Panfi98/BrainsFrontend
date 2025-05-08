@@ -1,7 +1,7 @@
 import './Login.css';
 import {TextInput} from "../Input Field/TextInput.jsx";
 import {useAuth} from "../../Context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 export const Login = () => {
@@ -35,8 +35,8 @@ export const Login = () => {
                 <button onClick={handleSubmit}>Login</button>
                 <div className='login-footer'>
                     <p className='register-text'>
-                        Don't have an account?  
-                        <a href=""> Sign up</a>
+                        Don't have an account?
+                        <Link to="/signup">Sign up</Link>
                     </p>
                     <a href="" className='forgot-password-text'>Forgot your password?</a>
                 </div>
