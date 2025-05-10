@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
-import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddReference } from "../../Fetcher/AddReference.js";
 
@@ -18,7 +18,7 @@ const StageReferenceInfo = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
-    const { resumeData } = useResume(); // Assuming resumeData contains the id
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const onChange = (e) => {
@@ -31,19 +31,13 @@ const StageReferenceInfo = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        if (!resumeData || !resumeData.id) {
-            console.error('Resume ID is missing. Cannot navigate.');
-            // Handle the error appropriately, maybe show a message to the user
-            return;
-        }
-
         setIsLoading(true);
         try {
-            const response = await AddReference(newReferenceData, token, resumeData.id);
+            const response = await AddReference(newReferenceData, token, id);
             console.log('Sending reference info:', newReferenceData);
 
             if (response) {
-                navigate(`/cv/${resumeData.id}`);
+                navigate(`/cv/${id}/my-cv`);
                 console.log('Successfully set reference info');
             } else {
                 console.error('Failed to add reference info:', response);
@@ -60,12 +54,12 @@ const StageReferenceInfo = () => {
             <div className="progress-bar">
                 <p>CV progress</p>
                 <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-projects-info")}>Project info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/education`)}>Education info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/projects`)}>Project info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/skills`)}>Skills info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/experience`)}>Experience info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/certification`)}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/reference`)}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">

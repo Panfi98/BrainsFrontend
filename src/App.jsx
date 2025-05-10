@@ -33,14 +33,14 @@ function App() {
               <Route path="/profile" element={<Profile />}/>
               <Route path="/dashboard" element={<Dashboard />}/>
               <Route path="/your-applications" element={<YourApplications />}/>
-              <Route path="/stage-person-info" element={<StagePersonInfo />}/>
-              <Route path="/stage-education-info" element={<StageEducationInfo />}/>
-              <Route path="/stage-projects-info" element={<StageProjectInfo />}/>
-              <Route path="/stage-skills-info" element={<StageSkillsInfo />}/>
-              <Route path="/stage-experience-info" element={<StageExperienceInfo />}/>
-              <Route path="/stage-certification-info" element={<StageCertificationInfo />}/>
-              <Route path="/stage-reference-info" element={<StageReferenceInfo />}/>
-              <Route path="/cv/:id" element={<CvPage/>}/>
+              <Route path="/cv" element={<StagePersonInfo />}/>
+              <Route path="/cv/:id/education" element={<StageEducationInfo />}/>
+              <Route path="/cv/:id/projects" element={<StageProjectInfo />}/>
+              <Route path="/cv/:id/skills" element={<StageSkillsInfo />}/>
+              <Route path="/cv/:id/experience" element={<StageExperienceInfo />}/>
+              <Route path="/cv/:id/certification" element={<StageCertificationInfo />}/>
+              <Route path="/cv/:id/reference" element={<StageReferenceInfo />}/>
+              <Route path="/cv/:id/my-cv" element={<CvPage/>}/>
           </Routes>
         </div>
       </ResumeProvider>
