@@ -70,7 +70,6 @@ const StageSkillsInfo = () => {
                     <h1>CV Maker</h1>
                     <h2>Stage 4</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
                         <h2>Skills info</h2>

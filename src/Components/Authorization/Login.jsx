@@ -33,19 +33,19 @@ export const Login = () => {
 
 
     return (
-        <div className='login-container'>
-            <div className={'login'}>
-                <h3>Log in</h3>
+        <div className={'login'}>
+            <h3>Log in</h3>
+            <div className='login-input'>
                 <TextInput label={'username'} onChange={onChange} value={userData.username}/>
                 <TextInput label={'password'} onChange={onChange} value={userData.password} type="password"/>
-                <button onClick={handleSubmit}>{isLoading ? "Login..." : "Login" }</button>
-                <div className='login-footer'>
-                    <p className='register-text'>
-                        Don't have an account?  
-                        <a href=""> Sign up</a>
-                    </p>
-                    <a href="" className='forgot-password-text'>Forgot your password?</a>
-                </div>
+            </div>
+            <button onClick={handleSubmit}>{isLoading ? "Login..." : "Login" }</button>
+            <div className='login-footer'>
+                <p className='register-text'>
+                    Don't have an account?  
+                    <a href="/signup"> Sign up</a>
+                </p>
+                <a href="" className='forgot-password-text'>Forgot your password?</a>
             </div>
         </div>
     )

@@ -47,32 +47,31 @@ export function SignUp() {
     };
 
     return (
-        <div className='signup-container'>
-            <div className='signup'>
-                <h3>Sign up</h3>
-                    <TextInput label='email' onChange={onChange} value={newUserData.email} />
-                    <TextInput label='username' onChange={onChange} value={newUserData.username} />
-                    <TextInput
-                        label='password'
-                        onChange={onChange}
-                        value={newUserData.password}
-                        type="password"
-                    />
-                    <TextInput
-                        label='password2'
-                        onChange={onChange}
-                        value={newUserData.password2}
-                        type="password"
-                    />
-                    <button
-                        onClick={onSubmit}
-                        className="signup-button"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Signing up...' : 'Sign Up'}
-                    </button>
-                <div className='signup-footer'></div>
+        <div className='signup'>
+            <h3>Sign up</h3>
+            <div className='signup-input'>
+                <TextInput label='email' onChange={onChange} value={newUserData.email} />
+                <TextInput label='username' onChange={onChange} value={newUserData.username} />
+                <TextInput
+                    label='password'
+                    onChange={onChange}
+                    value={newUserData.password}
+                    type="password"
+                />
+                <TextInput
+                    label='password2'
+                    onChange={onChange}
+                    value={newUserData.password2}
+                    type="password"
+                />
             </div>
+            <button
+                onClick={onSubmit}
+                className="signup-button"
+                disabled={isLoading}
+            >
+                {isLoading ? 'Signing up...' : 'Sign Up'}
+            </button>
         </div>
     );
 }

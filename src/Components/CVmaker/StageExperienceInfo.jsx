@@ -82,7 +82,6 @@ const StageExperienceInfo = () => {
                     <h1>CV Maker</h1>
                     <h2>Stage 5</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
                         <h2>Experience info</h2>
@@ -124,11 +123,15 @@ const StageExperienceInfo = () => {
                         <div className="input-group">
                         <label htmlFor="active">Active:</label>
                         <div className="radio-group">
-                            <input type="radio" id="active" name="active" value="active" onChange={onChange}/>
-                            <label htmlFor="active">Active</label>
-                            <input type="radio" id="non active" name="active" value="non active" onChange={onChange}/>
-                            <label htmlFor="non-active">Non active</label>
-                        </div>
+                                <div className="radio-option">
+                                    <input type="radio" id="active" name="active" value="true" onChange={onChange} />
+                                    <label htmlFor="active">Active</label>
+                                </div>
+                                <div className="radio-option">
+                                    <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
+                                    <label htmlFor="non-active">Not active</label>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="button-group">

@@ -46,7 +46,6 @@ const StagePersonInfo = () => {
                 const responceData = await response.json();
                 
                 const resumeId = responceData.data.id;
-                console.log('Response:', responceData);
                 console.log('Resume ID:', resumeId);
                 
                 navigate(`/cv/${resumeId}/education`);

@@ -140,10 +140,14 @@ const StageEducationInfo = () => {
                         <div className="input-group">
                             <label htmlFor="active">Active:</label>
                             <div className="radio-group">
-                                <input type="radio" id="active" name="active" value="true" onChange={onChange} />
-                                <label htmlFor="active">Active</label>
-                                <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
-                                <label htmlFor="non-active">Not active</label>
+                                <div className="radio-option">
+                                    <input type="radio" id="active" name="active" value="true" onChange={onChange} />
+                                    <label htmlFor="active">Active</label>
+                                </div>
+                                <div className="radio-option">
+                                    <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
+                                    <label htmlFor="non-active">Not active</label>
+                                </div>
                             </div>
                         </div>
                         

@@ -106,10 +106,10 @@ const StageReferenceInfo = () => {
             <div className="cv-tips">
                 <p>Tips</p>
                 <ul>
-                    <li>Provide professional references who can speak to your skills and experience.</li>
-                    <li>Inform your references beforehand that they might be contacted.</li>
-                    <li>Ensure contact information is accurate and up-to-date.</li>
-                </ul>
+                    <li>Make sure to include all relevant certifications.</li>
+                    <li>Double-check the dates and URLs for accuracy.</li>
+                    <li>Keep your descriptions concise and to the point.</li>
+            </ul>
             </div>
         </div>
     );

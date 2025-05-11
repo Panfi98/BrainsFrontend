@@ -98,10 +98,14 @@ const StageProjectInfo = () => {
                         <div className="input-group">
                             <label htmlFor="completed">Completed:</label>
                             <div className="radio-group">
-                                <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
-                                <label htmlFor="completed">Completed</label>
-                                <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
-                                <label htmlFor="non-completed">Non completed</label>
+                                <div className="radio-option">
+                                    <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
+                                    <label htmlFor="completed">Completed</label>
+                                </div>
+                                <div className="radio-option">
+                                    <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
+                                    <label htmlFor="non-completed">Non completed</label>
+                                </div>
                             </div>
                         </div>
 

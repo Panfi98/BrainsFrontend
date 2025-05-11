@@ -2,14 +2,17 @@ import './ProfileMenu.css';
 import { HiOutlineUser } from "react-icons/hi2";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
+import { useAuth } from "../../../Context/AuthContext.jsx";
 
 export default function ProfileMenu() {
+
+    const { userData } = useAuth();
 
     return (
         <div className="profile-menu">
             <div className="profile-header">
                 {/*<img src="" alt="User avatar" />*/}
-                <p>My nickname</p>
+                <p>{userData.username}</p>
             </div>
             <button className="profile-menu-btn">
                 <HiOutlineUser className="icon" />
