@@ -10,7 +10,7 @@ const FirstPage = () => {
         <div className="first-page-container">
             <header className="first-page-header">
                 <div className="logo-title">
-                    <h1>JobNest</h1>
+                    <h1>JobKit</h1>
                 </div>
                 <nav className="header-nav">
                     <button onClick={() => navigate('/login')} className="nav-button login-button">Login</button>
@@ -19,12 +19,15 @@ const FirstPage = () => {
             </header>
             <main className="first-page-content">
                 <div className="hero-section">
-                    <h2>Welcome to JobNest</h2>
-                    <p>Apply fast, apply well.</p>
+                    <h2>Welcome to JobKit</h2>
+                    <p>Simplify your job hunt with JobKit.</p>
+                    <p>Find opportunities easier with smart filtering.</p>
+                    <p>Build standout applications.
+                    Land your dream job faster.</p>
                 </div>
             </main>
             <footer className="first-page-footer">
-                <p>&copy; {new Date().getFullYear()} MyApp. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()} Brain. All rights reserved.</p>
             </footer>
         </div>
     );
