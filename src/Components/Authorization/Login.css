@@ -1,38 +1,39 @@
+.login-container{
+    width: 100dvw;
+    height: 100dvh;
+    background-color: #D3E3FF;
+    font-size: 36px;
+}
+
 .login {
+    width: 976px;
+    height: 480px;
     margin: 100px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 30px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 4px 4px 16px #00000040,
-    -4px -4px 16px #00000040;
-}
-
-.login h3 {
-    font-size: 36px;
-    font-weight: 600;
-    color: #333;
-    padding: 62px 0 32px 0;
-}
-
-.login-input {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    padding: 0 200px;
+    gap: 32px;
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+    box-shadow: 4px 4px 16px #00000040,
+    -4px -4px 16px #00000040;
+    font-weight: 500;
 }
 
 .login input {
-    height: 40px;
-    padding: 10px;
     width: 638px;
+    height: 40px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 12px;
     font-size: 24px;
+    transition: border-color 0.2s ease-in-out;
 }
 
 .text-input input:focus {
@@ -45,9 +46,8 @@
     background-color: #4a90e2;
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 4px;
     padding: 12px;
-    margin: 32px 0 16px 0;
     width: 304px;
     height: 50px;
     font-size: 24px;
@@ -63,7 +63,6 @@
     justify-content: center;
     width: 100%;
     gap: 8px;
-    padding-bottom: 32px;
 }
 
 .register-text a {

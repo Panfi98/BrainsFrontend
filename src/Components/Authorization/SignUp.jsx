@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TextInput } from "../Input Field/TextInput.jsx";
 import { CreateUser } from "../../Fetcher/CreateUser.js";
-import VeryficationEmail from "./VeryficationEmail.jsx";
 
 export function SignUp() {
     const [newUserData, setNewUserData] = useState({
@@ -13,8 +12,6 @@ export function SignUp() {
         email: ""
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [userId, setUserId] = useState(null);
-    const [showVerification, setShowVerification] = useState(false);
     const navigate = useNavigate();
 
     const onChange = (e) => {
@@ -39,9 +36,7 @@ export function SignUp() {
         try {
             const response = await CreateUser(newUserData);
             if (response.ok) {
-                const responseData = await response.json();
-                setUserId(responseData.id);
-                setShowVerification(true);
+                navigate('/login');
                 console.log('Successfully signed up');
             }
         } catch (error) {
@@ -52,34 +47,32 @@ export function SignUp() {
     };
 
     return (
-        <div className='signup'>
-            <h3>Sign up</h3>
-            <div className='signup-input'>
-                <TextInput label='email' name='email' onChange={onChange} value={newUserData.email} />
-                <TextInput label='username' name='username' onChange={onChange} value={newUserData.username} />
-                <TextInput
-                    label='password'
-                    name = 'password'
-                    onChange={onChange}
-                    value={newUserData.password}
-                    type="password"
-                />
-                <TextInput
-                    label='password2'
-                    name = 'password2'
-                    onChange={onChange}
-                    value={newUserData.password2}
-                    type="password"
-                />
+        <div className='signup-container'>
+            <div className='signup'>
+                <h3>Sign up</h3>
+                    <TextInput label='email' onChange={onChange} value={newUserData.email} />
+                    <TextInput label='username' onChange={onChange} value={newUserData.username} />
+                    <TextInput
+                        label='password'
+                        onChange={onChange}
+                        value={newUserData.password}
+                        type="password"
+                    />
+                    <TextInput
+                        label='password2'
+                        onChange={onChange}
+                        value={newUserData.password2}
+                        type="password"
+                    />
+                    <button
+                        onClick={onSubmit}
+                        className="signup-button"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Signing up...' : 'Sign Up'}
+                    </button>
+                <div className='signup-footer'></div>
             </div>
-            <button
-                onClick={onSubmit}
-                className="signup-button"
-                disabled={isLoading}
-            >
-                {isLoading ? 'Signing up...' : 'Sign Up'}
-            </button>
-            {showVerification ? <VeryficationEmail userId={userId} /> : null}
         </div>
     );
 }

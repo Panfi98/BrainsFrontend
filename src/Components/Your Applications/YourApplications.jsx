@@ -20,7 +20,7 @@ const YourApplications = () => {
                     <h1>Your Applications</h1>
                 </header>
                 <div className="buttons">
-                    <button onClick={() => navigate('/cv')}>
+                    <button onClick={() => navigate('/stage-person-info')}>
                         <HiOutlinePlusSmall />
                         CV</button>
                     <button onClick={() => navigate('/cover-letter')}>
