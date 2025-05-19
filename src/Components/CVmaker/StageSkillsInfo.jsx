@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
-import { useResume } from "../../Context/ResumeContext.jsx";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddSkills } from "../../Fetcher/AddSkills.js";
@@ -17,7 +17,7 @@ const StageSkillsInfo = () => {
     
         const [isLoading, setIsLoading] = useState(false);
         const { token } = useAuth();
-        const { resumeData } = useResume();
+        const { id } = useParams();
         const navigate = useNavigate();
     
         const onChange = (e) => {
@@ -40,10 +40,10 @@ const StageSkillsInfo = () => {
     
             setIsLoading(true);
             try {
-                const response = await AddSkills(payload, token, resumeData.id);
+                const response = await AddSkills(payload, token, id);
                 console.log('Sending skills info:', payload);
                 if (response.ok) {
-                    navigate("/stage-experience-info");
+                    navigate(`/cv/${id}/experience`);
                     console.log('Successfully set skills info');
                 }
             }catch (error) {
@@ -58,19 +58,18 @@ const StageSkillsInfo = () => {
             <div className="progress-bar">
                 <p>CV progress</p>
                 <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>    
-                <button className="progress-button" onClick={() => navigate("/stage-projects-info")}>Project info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/education`)}>Education info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/projects`)}>Project info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/skills`)}>Skills info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/experience`)}>Experience info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/certification`)}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/reference`)}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
                     <h2>Stage 4</h2>
                 </div>
-                <div className="next-stage"></div>
                 <div className="cv-form">
                     <form>
                         <h2>Skills info</h2>

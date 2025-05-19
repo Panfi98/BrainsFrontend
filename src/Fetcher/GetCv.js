@@ -1,6 +1,6 @@
 export async function GetCvById(resumeId, token){
 
-    const url = `${import.meta.env.VITE_BRAIN_GET_RESUME}/${resumeId}`
+    const url = `${import.meta.env.VITE_BRAIN_RESUME_ENDPOINT}/${resumeId}`
 
     const response = await fetch(url, {
         method: "GET",

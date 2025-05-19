@@ -1,8 +1,9 @@
 .main-container {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    height: 100dvh;
-    width: 100dvw;
+    gap: 60px;
+    min-height: 100vh;
+    width: 100vw;
     background-color: #D3E3FF;
+    padding-bottom: 40px;
 }
