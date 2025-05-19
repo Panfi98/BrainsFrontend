@@ -11,7 +11,6 @@ export default function ProfileMenu() {
     return (
         <div className="profile-menu">
             <div className="profile-header">
-                {/*<img src="" alt="User avatar" />*/}
                 <p>{userData.username}</p>
             </div>
             <button className="profile-menu-btn">

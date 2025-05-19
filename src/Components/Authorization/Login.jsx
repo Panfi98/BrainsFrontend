@@ -25,6 +25,7 @@ export const Login = () => {
             console.log("Authentication successfull. Token: ", token)
         } catch (error) {
             console.error("Authentication failed:", error);
+            alert("Login failed. Please check your username and password.");
         }
         finally {
             setIsLoading(false);
@@ -36,8 +37,8 @@ export const Login = () => {
         <div className={'login'}>
             <h3>Log in</h3>
             <div className='login-input'>
-                <TextInput label={'username'} onChange={onChange} value={userData.username}/>
-                <TextInput label={'password'} onChange={onChange} value={userData.password} type="password"/>
+                <TextInput label={'username'} name='username' onChange={onChange} value={userData.username}/>
+                <TextInput label={'password'} name='password' onChange={onChange} value={userData.password} type="password"/>
             </div>
             <button onClick={handleSubmit}>{isLoading ? "Login..." : "Login" }</button>
             <div className='login-footer'>

@@ -35,11 +35,6 @@ const StageEducationInfo = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        if (!resumeData) {
-            alert("Resume ID is missing. Please complete the previous step.");
-            return;
-        }
-
         const payload = {
             name: newEducationData.name,
             type: newEducationData.type,

@@ -17,6 +17,8 @@ import StageCertificationInfo from './Components/CVmaker/StageCertificationInfo.
 import StageReferenceInfo from './Components/CVmaker/StageReferenceInfo.jsx';
 import CvPage from "./Components/CvPage/CvPage.jsx"
 import Profile from './Components/ProfilePage/Profile.jsx';
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
 
 function App() {
   const location = useLocation();

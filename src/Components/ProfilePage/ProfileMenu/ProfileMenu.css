@@ -9,7 +9,6 @@
     box-shadow: 2px 2px 12px #00000040,
                 -2px -2px 12px #00000040;
     gap: 36px;
-    
 }
 
 .profile-menu-btn{
@@ -31,16 +30,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 232px;
+    width: 242px;
     padding-top: 20px;
-}
-
-.myprofile-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    gap: 0.5rem;
 }
 
 .icon{
