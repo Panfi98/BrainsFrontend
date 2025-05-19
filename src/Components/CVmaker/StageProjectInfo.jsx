@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
-import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddProject } from "../../Fetcher/AddProject.js";
 
@@ -17,8 +17,8 @@ const StageProjectInfo = () => {
         });
     
         const [isLoading, setIsLoading] = useState(false);
+        const { id } = useParams();
         const { token } = useAuth();
-        const { resumeData } = useResume();
         const navigate = useNavigate();
     
         const onChange = (e) => {
@@ -42,10 +42,10 @@ const StageProjectInfo = () => {
     
             setIsLoading(true);
             try {
-                const response = await AddProject(payload, token, resumeData.id);
+                const response = await AddProject(payload, token, id);
                 console.log('Sending project info:', payload);
                 if (response.ok) {
-                    navigate("/stage-skills-info");
+                    navigate(`/cv/${id}/skills`);
                     console.log('Successfully set project info');
                 }
             }catch (error) {
@@ -60,12 +60,12 @@ const StageProjectInfo = () => {
             <div className="progress-bar">
                 <p>CV progress</p>
                 <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>    
-                <button className="progress-button" onClick={() => navigate("/stage-projects-info")}>Project info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/education`)}>Education info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/projects`)}>Project info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/skills`)}>Skills info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/experience`)}>Experience info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/certification`)}>Certification info</button>
+                <button className="progress-button" onClick={() => navigate(`/cv/${id}/reference`)}>Reference info</button>
             </div>
             <div className="cv-maker">
                 <div className="cv-maker-header">
@@ -98,10 +98,14 @@ const StageProjectInfo = () => {
                         <div className="input-group">
                             <label htmlFor="completed">Completed:</label>
                             <div className="radio-group">
-                                <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
-                                <label htmlFor="completed">Completed</label>
-                                <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
-                                <label htmlFor="non-completed">Non completed</label>
+                                <div className="radio-option">
+                                    <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
+                                    <label htmlFor="completed">Completed</label>
+                                </div>
+                                <div className="radio-option">
+                                    <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
+                                    <label htmlFor="non-completed">Non completed</label>
+                                </div>
                             </div>
                         </div>
 
