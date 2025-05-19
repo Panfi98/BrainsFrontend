@@ -1,32 +1,106 @@
-.first-page{
-    display: flex;
-    flex-direction: column;
+body {
+  background-color: #D3E3FF;
 }
 
-.first-page-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-    margin: -10px 0 0 -10px;
-    background-color: #032d68;
-}
-.header-buttons{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 25px;
-    margin: 0 30px;
-    width: 200px;
+.first-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.header-buttons button{
-    width: 100px;
+.first-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 12px rgb(110, 141, 181);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(5px); /* Frosted glass effect */
 }
 
-.first-page-header h1{
-    color: white;
-    font-size: 36px;
-    margin: 0 30px;
+.logo-title h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.header-nav .login-button {
+  margin-left: 15px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  border: 2px solid #2d6db5;
+}
+
+.header-nav .signup-button {
+  margin-left: 15px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #2d6db5;
+  border: 2px solid #2d6db5;
+  color: #FFFFFF;
+}
+
+.header-nav .login-button:hover {
+  background-color: transparent;
+  color: #3a7bc8;
+  box-shadow: 0 0 15px #1451bc;
+}
+
+.header-nav .signup-button:hover {
+  background-color: #3a7bc8;
+  color: #ffffff;
+  box-shadow: 0 0 15px #1451bc;
+}
+
+.first-page-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  background-image: url('src/assets/FirstPageBackground1.jpg'); /* <-- Update with your image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-section {
+  max-width: 700px;
+}
+
+.hero-section h2 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: rgb(0, 0, 0);
+}
+
+.hero-section p {
+  font-size: 1.3rem;
+  color: #000000;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+
+.first-page-footer {
+  text-align: center;
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  font-size: 0.9rem;
+  color: #000000;
 }
