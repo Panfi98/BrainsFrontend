@@ -3,10 +3,17 @@ import { HiOutlineUser } from "react-icons/hi2";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { useAuth } from "../../../Context/AuthContext.jsx";
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileMenu() {
 
-    const { userData } = useAuth();
+    const { userData, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () =>{
+        logout();
+        navigate('/login')
+    }
 
     return (
         <div className="profile-menu">
@@ -25,7 +32,7 @@ export default function ProfileMenu() {
                 <IoSettingsOutline className="icon" />
                 <p>Setting</p>
             </button>
-            <button className="profile-menu-btn">
+            <button onClick={handleLogout} className="profile-menu-btn">
                 <MdLogout className="icon" />
                 <p>Log Out</p>
             </button>
