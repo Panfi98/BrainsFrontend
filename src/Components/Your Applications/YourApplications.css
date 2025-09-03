@@ -39,10 +39,22 @@
     color: #FFFFFF;
     border-radius: 12px;
     cursor: pointer;
-    border: none;
+    border: 2px solid #2E74EE;
     font-size: 24px;
     padding: 12px 10px;
     width: 100%;
+}
+
+.buttons button:hover{
+    color:#2E74EE;
+    background-color: #FFFFFF;
+    border: 2px solid #2E74EE;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5)
+}
+
+.buttons button:active{
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5)
 }
 
 .applications-list{
