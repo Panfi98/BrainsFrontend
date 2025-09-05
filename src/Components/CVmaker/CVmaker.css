@@ -22,16 +22,30 @@
     font-weight: 600;
     padding-bottom: 38px;
     text-align: center;
+    color:#2E74EE;
 }
 
 .progress-bar button{
     width: 100%;
     margin: 10px auto;
-    background-color: #FFFFFF;
+    background-color: #2E74EE;
+    color: #FFFFFF;
     font-size: 24px;
     padding: 15px;
+    border: 2px solid #2E74EE;
     border-radius: 12px;
     cursor: pointer;
+}
+
+.progress-bar button:hover{
+    color: #2E74EE;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 2px rgba(0, 0, 0, 0.5);
+}
+
+.progress-bar button:active{
+    transform: translateY(2px);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .cv-maker{
@@ -47,6 +61,7 @@
     box-shadow: 2px 2px 12px #00000040,
                 -2px -2px 12px #00000040;
     padding: 25px 170px;
+    color:#2E74EE;
 }
 
 .cv-maker-header h1{
@@ -74,6 +89,7 @@
     font-size: 40px;
     margin-bottom: 28px;
     text-align: center;
+    color:#2E74EE;
 }
 
 .input-group{
@@ -158,10 +174,21 @@
     width: 30%;
     background-color: #2E74EE;
     color: #FFFFFF;
-    border: none;
+    border: 2px solid #2E74EE;
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+}
+
+.previous-btn:hover{
+    color: #2E74EE;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 2px rgba(0, 0, 0, 0.5);
+}
+
+.previous-btn:active{
+    transform: translateY(2px);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .next-btn{

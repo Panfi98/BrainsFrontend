@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './CVmaker.css';
 import { CreatePerson } from "../../Fetcher/CreatePerson.js";
+import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 
 const StagePersonInfo = () => {
     const [newPersonData, setNewPersonData] = useState({
@@ -60,16 +61,7 @@ const StagePersonInfo = () => {
 
     return (
         <div className="cv-maker-container">
-            <div className="progress-bar">
-                <p>CV progress</p>
-                <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-education-info")}>Education info</button>    
-                <button className="progress-button" onClick={() => navigate("/stage-projects-info")}>Project info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-skills-info")}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-experience-info")}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-certification-info")}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate("/stage-reference-info")}>Reference info</button>
-            </div>
+            <ProgressBar id={null}/>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                 <h1>CV Maker</h1>

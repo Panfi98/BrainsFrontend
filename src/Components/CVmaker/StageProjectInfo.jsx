@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddProject } from "../../Fetcher/AddProject.js";
+import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 
 const StageProjectInfo = () => {
     const [newProjectData, setNewProjectData] = useState({
@@ -57,16 +58,7 @@ const StageProjectInfo = () => {
 
     return(
         <div className="cv-maker-container">
-            <div className="progress-bar">
-                <p>CV progress</p>
-                <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/education`)}>Education info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/projects`)}>Project info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/skills`)}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/experience`)}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/certification`)}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/reference`)}>Reference info</button>
-            </div>
+            <ProgressBar id={id}/>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
