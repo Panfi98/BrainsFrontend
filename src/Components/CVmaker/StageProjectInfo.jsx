@@ -6,28 +6,44 @@ import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddProject } from "../../Fetcher/AddProject.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
+import { CvFormProject } from "./CvComponets/CvFormProject.jsx";
+
+const emptyProject = {
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    completed: "",
+    status: "InProgress",
+}
 
 const StageProjectInfo = () => {
-    const [newProjectData, setNewProjectData] = useState({
+    const [newProjectData, setNewProjectData] = useState([{
         name: "",
         description: "",
         startDate: "",
         endDate: "",
         completed: "",
         status: "InProgress",
-        });
+        }]);
     
         const [isLoading, setIsLoading] = useState(false);
         const { id } = useParams();
         const { token } = useAuth();
         const navigate = useNavigate();
     
-        const onChange = (e) => {
+        const onChange = (index) => (e) => {
             const { name, value } = e.target;
-            setNewProjectData((newProjectData) => ({
-                ...newProjectData, [name]: value,
-            }));
+            setNewProjectData((prev) => {
+                const updated = [...prev];
+                updated[index] = {...updated[index], [name]: value};
+                return updated;
+            });
         };
+
+        const addForm = () => {
+        setNewProjectData((prev) => [...prev, {emptyProject}])
+    }
     
         const onSubmit = async (e) => {
             e.preventDefault();
@@ -65,47 +81,18 @@ const StageProjectInfo = () => {
                     <h2>Stage 3</h2>
                 </div>
                 <div className="cv-form">
-                    <form>
-                        <h2>Project info</h2>
-                        <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="startDate">Started at:</label>
-                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="endDate">Complited at:</label>
-                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="completed">Completed:</label>
-                            <div className="radio-group">
-                                <div className="radio-option">
-                                    <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
-                                    <label htmlFor="completed">Completed</label>
-                                </div>
-                                <div className="radio-option">
-                                    <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
-                                    <label htmlFor="non-completed">Non completed</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
-                        </div> 
-                    </form>
+                    {newProjectData.map((proj, index) => (
+                        <CvFormProject
+                            key={index}
+                            index={index}
+                            proj={proj}
+                            onChange={onChange} />
+                    ))}
+                    <button className="add-form-btn" onClick={addForm}>Add education</button>
+                    <div className="button-group">
+                        <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
+                        <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
+                    </div> 
                 </div>
             </div>
             <div className="cv-tips">

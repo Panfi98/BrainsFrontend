@@ -8,7 +8,7 @@ import { AddEducation } from "../../Fetcher/AddEducation.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormEducation } from "./CvComponets/CvFromEducation.jsx";
 
-const emptyEducation = {
+const emptyEdu = () => ({
   name: "",
   description: "",
   startDate: "",
@@ -18,30 +18,20 @@ const emptyEducation = {
   place: "",
   active: "",
   status: "InProgress",
-};
+});
 
 const StageEducationInfo = () => {
 
-    const [newEducationData, setNewEducationData] = useState([{
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        degree: "",
-        type: "",
-        place: "",
-        active: "",
-        status: "InProgress",
-    }]);
+    const [educationData, setEducationData] = useState([emptyEdu()]);
 
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const onChange = (index) => (e) => {
+    const onChange = (index, e) => {
         const { name, value } = e.target;
-        setNewEducationData((prev) => {
+        setEducationData((prev) => {
             const updated = [...prev];
             updated[index] = {...updated[index], [name]: value};
             return updated;
@@ -49,37 +39,30 @@ const StageEducationInfo = () => {
     };
 
     const addForm = () => {
-        setNewEducationData((prev) => [...prev, {emptyEducation}])
+        setEducationData((prev) => [...prev, emptyEdu()])
     }
 
     const onSubmit = async (e) => {
         e.preventDefault();
-
-        const payload = {
-            name: newEducationData.name,
-            type: newEducationData.type,
-            startDate: new Date(newEducationData.startDate).toISOString(),
-            endDate: new Date(newEducationData.endDate).toISOString(),
-            description: newEducationData.description,
-            degree: newEducationData.degree,
-            place: newEducationData.place,
-            active: newEducationData.active === "true",
-            status: "NotStarted",
-        };
     
+        const payload = educationData.map((edu) => ({
+            name: edu.name,
+            type: edu.type,
+            startDate: new Date(edu.startDate).toISOString(),
+            endDate: new Date(edu.endDate).toISOString(),
+            description: edu.description,
+            degree: edu.degree,
+            place: edu.place,
+            active: edu.active === "true",
+            status: "NotStarted",
+        }));
+
         setIsLoading(true);
         try {
-            console.log(`Fetching CV data for ID: ${id}`);
-            const response = await AddEducation(payload, token, id);
+            await Promise.all(payload.map((edu) => AddEducation(edu, token, id)));
             console.log("Sending education info:", payload);
-            if (response.ok) {
-                navigate(`/cv/${id}/projects`);
-                console.log("Successfully set education info");
-            } else {
-                const errorDetails = await response.json();
-                console.error("AddEducation failed:", errorDetails);
-                alert(`Error: ${errorDetails.message || "Failed to add education info"}`);
-            }
+            navigate(`/cv/${id}/projects`);
+            console.log("Successfully set education info");
         }catch (error) {
             console.error('Education info error:', error);
         } finally {
@@ -96,20 +79,21 @@ const StageEducationInfo = () => {
                     <h2>Stage 2</h2>
                 </div>
                 <div className="cv-form">
-                    {newEducationData.map((edu, index) => (
-                        <CvFormEducation 
-                            key={index}
-                            index={index} 
-                            onChange={onChange(index)}
-                            value = {edu}    
-                            addForm={addForm}
-                        />
-                    ))}
-                    <button className="add-form-btn" onClick={addForm}>Add education</button>
-                    <div className="button-group">
-                        <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
-                        <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
-                    </div> 
+                    <form onSubmit={onSubmit}>
+                        {educationData.map((edu, index) => (
+                            <CvFormEducation 
+                                key={index}
+                                index={index} 
+                                onChange={onChange}
+                                eduData = {edu}
+                            />
+                        ))}
+                        <button className="add-form-btn" onClick={addForm}>Add education</button>
+                        <div className="button-group">
+                            <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div className="cv-tips">

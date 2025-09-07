@@ -125,7 +125,7 @@ const StageExperienceInfo = () => {
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-skills-info")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
