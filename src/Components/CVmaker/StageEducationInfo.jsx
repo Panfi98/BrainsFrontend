@@ -6,10 +6,23 @@ import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddEducation } from "../../Fetcher/AddEducation.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
+import { CvFormEducation } from "./CvComponets/CvFromEducation.jsx";
+
+const emptyEducation = {
+  name: "",
+  description: "",
+  startDate: "",
+  endDate: "",
+  degree: "",
+  type: "",
+  place: "",
+  active: "",
+  status: "InProgress",
+};
 
 const StageEducationInfo = () => {
 
-    const [newEducationData, setNewEducationData] = useState({
+    const [newEducationData, setNewEducationData] = useState([{
         name: "",
         description: "",
         startDate: "",
@@ -19,19 +32,25 @@ const StageEducationInfo = () => {
         place: "",
         active: "",
         status: "InProgress",
-    });
+    }]);
 
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const onChange = (e) => {
+    const onChange = (index) => (e) => {
         const { name, value } = e.target;
-        setNewEducationData((newEducationData) => ({
-            ...newEducationData, [name]: value,
-        }));
+        setNewEducationData((prev) => {
+            const updated = [...prev];
+            updated[index] = {...updated[index], [name]: value};
+            return updated;
+        });
     };
+
+    const addForm = () => {
+        setNewEducationData((prev) => [...prev, {emptyEducation}])
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -77,72 +96,20 @@ const StageEducationInfo = () => {
                     <h2>Stage 2</h2>
                 </div>
                 <div className="cv-form">
-                    <form>
-                        <h2>Education info</h2>
-                        <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="startDate">Started at:</label>
-                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="endDate">Ended at:</label>
-                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="degree">Degree:</label>
-                            <select id="degree" name="degree" onChange={onChange}> 
-                                <option value="none">None</option>
-                                <option value="bachelor">Bachelor</option>
-                                <option value="master">Master</option>
-                                <option value="phd">PhD</option>
-                            </select>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="type">Type:</label>
-                            <select id="type" name="type" onChange={onChange}>
-                                <option value="none">None</option>
-                                <option value="economist">Economist</option>
-                                <option value="programist">Programist</option>
-                                <option value="jurist">Jurist</option>
-                            </select>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="place">Place:</label>
-                            <input type="text" id="place" name="place" onChange={onChange}></input>
-                        </div>
-                    
-                        <div className="input-group">
-                            <label htmlFor="active">Active:</label>
-                            <div className="radio-group">
-                                <div className="radio-option">
-                                    <input type="radio" id="active" name="active" value="true" onChange={onChange} />
-                                    <label htmlFor="active">Active</label>
-                                </div>
-                                <div className="radio-option">
-                                    <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
-                                    <label htmlFor="non-active">Not active</label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
-                        </div> 
-                    </form>
+                    {newEducationData.map((edu, index) => (
+                        <CvFormEducation 
+                            key={index}
+                            index={index} 
+                            onChange={onChange(index)}
+                            value = {edu}    
+                            addForm={addForm}
+                        />
+                    ))}
+                    <button className="add-form-btn" onClick={addForm}>Add education</button>
+                    <div className="button-group">
+                        <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
+                        <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
+                    </div> 
                 </div>
             </div>
             <div className="cv-tips">
