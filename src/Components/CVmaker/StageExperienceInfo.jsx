@@ -6,65 +6,67 @@ import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddExperience } from "../../Fetcher/AddExperience.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
+import { CvFormExperience } from "./CvComponets/CvFormExperience.jsx";
+
+const emptyExp = () => ({
+    name: "",
+    description: "",
+    startedAt: "",
+    endedAt: "",
+    active: "",
+    type: "",
+    organisation: "",
+    position: "",
+    status: "InProgress",
+});
 
 const StageExperienceInfo = () => {
-    const [newExperienceData, setNewExperienceData] = useState({
-        name: "",
-        description: "",
-        startedAt: "",
-        endedAt: "",
-        active: "",
-        type: "",
-        organisation: "",
-        position: "",
-        status: "InProgress",
-        }); 
+    const [experienceData, setExperienceData] = useState([emptyExp()]); 
+    const [isLoading, setIsLoading] = useState(false);
+    const { token } = useAuth();
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const onChange = (index, e) => {
+        const { name, value } = e.target;
+        setExperienceData((prev) => {
+            const updated = [...prev];
+            updated[index] = {...updated[index], [name]: value};
+            return updated;
+        });
+    };
+
+    const AddExperience = () => {
+        setExperienceData((prev) => [...prev, emptyExp()])
+    }
+
+    const onSubmit = async (e) => {
+            e.preventDefault();
     
-        const [isLoading, setIsLoading] = useState(false);
-        const { token } = useAuth();
-        const { id } = useParams();
-        const navigate = useNavigate();
-    
-        const onChange = (e) => {
-            const { name, value } = e.target;
-            setNewExperienceData((newExperienceData) => ({
-                ...newExperienceData, [name]: value,
+            const payload = experienceData.map((exp) => ({
+                name: exp.name,
+                type: exp.type,
+                startedAt: new Date(exp.startedAt).toISOString(), 
+                endedAt: new Date(exp.endedAt).toISOString(), 
+                description: exp.description,
+                organisation: exp.organisation,
+                position: exp.position,
+                active: exp.active === "true",
+                status: "NotStarted",
             }));
-        };
-    
-        const onSubmit = async (e) => {
-                e.preventDefault();
         
-                const payload = {
-                    name: newExperienceData.name,
-                    type: newExperienceData.type,
-                    startedAt: new Date(newExperienceData.startedAt).toISOString(), // Преобразование в ISO 8601
-                    endedAt: new Date(newExperienceData.endedAt).toISOString(), 
-                    description: newExperienceData.description,
-                    organisation: newExperienceData.organisation,
-                    position: newExperienceData.position,
-                    active: newExperienceData.active === "true",
-                    status: "NotStarted",
-                };
-            
-                setIsLoading(true);
-                try {
-                    const response = await AddExperience(payload, token, id);
-                    console.log("Sending experience info:", payload);
-                    if (response.ok) {
-                        navigate(`/cv/${id}/certification`);
-                        console.log("Successfully set experience info");
-                    } else {
-                        const errorDetails = await response.json();
-                        console.error("AddExperience failed:", errorDetails);
-                        alert(`Error: ${errorDetails.message || "Failed to add experience info"}`);
-                    }
-                }catch (error) {
-                    console.error('Experience info error:', error);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
+            setIsLoading(true);
+            try {
+                await Promise.all(payload.map((exp) => AddExperience(exp, token, id)));
+                console.log("Sending experience info:", payload);
+                navigate(`/cv/${id}/certification`);
+                console.log("Successfully set experience info");
+            }catch (error) {
+                console.error('Experience info error:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
     return(
         <div className="cv-maker-container">
@@ -75,60 +77,19 @@ const StageExperienceInfo = () => {
                     <h2>Stage 5</h2>
                 </div>
                 <div className="cv-form">
-                    <form>
-                        <h2>Experience info</h2>
-                        <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="organisation">Organisation:</label>
-                            <input type="text" id="organisation" name="organisation" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="type">Type:</label>
-                            <input id="type" name="type" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="position">Position:</label>
-                            <input id="position" name="position" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="startedAt">Started at:</label>
-                            <input type="date" id="startedAt" name="startedAt" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="endedAt">Ended at:</label>
-                            <input type="date" id="endedAt" name="endedAt" onChange={onChange} />
-                        </div>  
-
-                        <div className="input-group">
-                        <label htmlFor="active">Active:</label>
-                        <div className="radio-group">
-                                <div className="radio-option">
-                                    <input type="radio" id="active" name="active" value="true" onChange={onChange} />
-                                    <label htmlFor="active">Active</label>
-                                </div>
-                                <div className="radio-option">
-                                    <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
-                                    <label htmlFor="non-active">Not active</label>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <form onSubmit={onSubmit}>
+                        {experienceData.map((exp, index) => (
+                            <CvFormExperience
+                                key={index}
+                                index={index}
+                                onChange={onChange}
+                                expData={exp}
+                            />
+                        ))}
+                        <button type="button" className="add-form-btn" onClick={AddExperience}>Add Experience</button>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-skills-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
+                            <button type="submit" onClick={(onSubmit)} className="next-btn">Next stage</button>
                         </div>
                     </form>
                 </div>

@@ -8,69 +8,59 @@ import { AddProject } from "../../Fetcher/AddProject.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormProject } from "./CvComponets/CvFormProject.jsx";
 
-const emptyProject = {
+const emptyProj = () => ({
     name: "",
     description: "",
     startDate: "",
     endDate: "",
     completed: "",
     status: "InProgress",
-}
+});
 
 const StageProjectInfo = () => {
-    const [newProjectData, setNewProjectData] = useState([{
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        completed: "",
-        status: "InProgress",
-        }]);
-    
-        const [isLoading, setIsLoading] = useState(false);
-        const { id } = useParams();
-        const { token } = useAuth();
-        const navigate = useNavigate();
-    
-        const onChange = (index) => (e) => {
-            const { name, value } = e.target;
-            setNewProjectData((prev) => {
-                const updated = [...prev];
-                updated[index] = {...updated[index], [name]: value};
-                return updated;
-            });
-        };
+    const [projectData, setProjectData] = useState([emptyProj()]);
+    const [isLoading, setIsLoading] = useState(false);
+    const { id } = useParams();
+    const { token } = useAuth();
+    const navigate = useNavigate();
 
-        const addForm = () => {
-        setNewProjectData((prev) => [...prev, {emptyProject}])
+    const onChange = (index) => (e) => {
+        const { name, value } = e.target;
+        setProjectData((prev) => {
+            const updated = [...prev];
+            updated[index] = {...updated[index], [name]: value};
+            return updated;
+        });
+    };
+
+    const addForm = () => {
+        setProjectData((prev) => [...prev, {emptyProj}])
     }
-    
-        const onSubmit = async (e) => {
-            e.preventDefault();
 
-            const payload = {
-                name: newProjectData.name,
-                description: newProjectData.description,
-                startDate: new Date(newProjectData.startDate).toISOString(), // Преобразование в ISO 8601
-                endDate: new Date(newProjectData.endDate).toISOString(),
-                completed: newProjectData.completed === "true",
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        const payload = projectData.map((proj) => ({
+                name: proj.name,
+                description: proj.description,
+                startDate: new Date(proj.startDate).toISOString(),
+                endDate: new Date(proj.endDate).toISOString(),
+                completed: proj.completed === "true",
                 status: "NotStarted",
-            };
-    
-            setIsLoading(true);
-            try {
-                const response = await AddProject(payload, token, id);
-                console.log('Sending project info:', payload);
-                if (response.ok) {
-                    navigate(`/cv/${id}/skills`);
-                    console.log('Successfully set project info');
-                }
-            }catch (error) {
-                console.error('Project info error:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+            }));
+
+        setIsLoading(true);
+        try {
+            await Promise.all(payload.map((proj) => AddProject(proj, token, id)));
+            console.log('Sending project info:', payload);
+            navigate(`/cv/${id}/skills`);
+            console.log('Successfully set project info');
+        }catch (error) {
+            console.error('Project info error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return(
         <div className="cv-maker-container">
@@ -81,11 +71,11 @@ const StageProjectInfo = () => {
                     <h2>Stage 3</h2>
                 </div>
                 <div className="cv-form">
-                    {newProjectData.map((proj, index) => (
+                    {projectData.map((proj, index) => (
                         <CvFormProject
                             key={index}
                             index={index}
-                            proj={proj}
+                            projData={proj}
                             onChange={onChange} />
                     ))}
                     <button className="add-form-btn" onClick={addForm}>Add education</button>

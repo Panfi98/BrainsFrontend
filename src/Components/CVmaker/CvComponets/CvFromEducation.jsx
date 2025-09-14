@@ -101,7 +101,7 @@ export function CvFormEducation ({index, onChange, eduData}) {
                             type="radio" 
                             id={`active_${index}`} 
                             name="active" 
-                            value="true" 
+                            value={true}
                             onChange={(e) => onChange(index, e)}
                         />
                         <label htmlFor={`active_${index}`}>Active</label>
@@ -111,7 +111,7 @@ export function CvFormEducation ({index, onChange, eduData}) {
                             type="radio" 
                             id={`non_active_${index}`} 
                             name="active" 
-                            value="false" 
+                            value={false}
                             onChange={(e) => onChange(index, e)}
                         />
                         <label htmlFor={`non_active_${index}`}>Not active</label>

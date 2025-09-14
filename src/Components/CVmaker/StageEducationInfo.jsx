@@ -23,7 +23,6 @@ const emptyEdu = () => ({
 const StageEducationInfo = () => {
 
     const [educationData, setEducationData] = useState([emptyEdu()]);
-
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
@@ -62,7 +61,7 @@ const StageEducationInfo = () => {
             await Promise.all(payload.map((edu) => AddEducation(edu, token, id)));
             console.log("Sending education info:", payload);
             navigate(`/cv/${id}/projects`);
-            console.log("Successfully set education info");
+            console.log("Successfully set education infof");
         }catch (error) {
             console.error('Education info error:', error);
         } finally {

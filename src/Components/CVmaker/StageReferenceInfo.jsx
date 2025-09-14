@@ -25,9 +25,9 @@ const StageReferenceInfo = () => {
     const onChange = (index, e) => {
         const { name, value } = e.target;
         setNewReferenceData((prev) => {
-            const next = [...prev];
-            next[index] = { ...next[index], [name]: value };
-        return next;
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [name]: value };
+            return updated;
         });
     };
 
@@ -69,18 +69,12 @@ const StageReferenceInfo = () => {
                                 onChange={onChange} />
                         ))}
                         <div className="button-row">
-                            <button
-                                type="button"
-                                className="secondary"
-                                onClick={addReferenceRow}
-                            >
-                                + Добавить контакт
-                            </button>
+                            <button type="button" className="secondary" onClick={addReferenceRow}>Add reference</button>
                         </div>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-certification-info")} className="previous-btn">Previous stage</button>
                             <button type="submit" className="next-btn" disabled={isLoading}>
-                                {isLoading ? 'Saving...' : 'Finish'} {/* Changed text and added disabled state */}
+                                {isLoading ? 'Saving...' : 'Finish'}
                             </button>
                         </div>
                     </form>

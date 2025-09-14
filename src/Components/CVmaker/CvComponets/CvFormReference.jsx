@@ -1,10 +1,8 @@
-// [FIX] Принимаем один объект props и деструктурируем
 export function CvFormReference({ index, refData, onChange }) {
   return (
-    // [FIX] key тут не нужен — он передаётся на уровне .map в родителе и внутрь компонента не попадает
     <div className="reference-block">
       <div className="reference-block__header">
-        <h3>Контакт #{index + 1}</h3>
+        <h3>Reference #{index + 1}</h3>
       </div>
 
       <div className="input-group">

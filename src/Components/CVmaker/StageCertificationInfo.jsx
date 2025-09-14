@@ -6,56 +6,62 @@ import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddCertification } from "../../Fetcher/AddCertification.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
+import { CvFormCertification } from "./CvComponets/CvFormCertification.jsx";
+
+const emptyCer = () => ({
+    name: "",
+    description: "",
+    date: "",
+    url: "",
+    type: "",
+    validTo: "",
+    status: "InProgress",
+})
 
 const StageCertificationInfo = () => {
-    const [newCertificationData, setNewCertificationData] = useState({
-        name: "",
-        description: "",
-        date: "",
-        url: "",
-        type: "",
-        validTo: "",
-        status: "InProgress",
+    const [certificationData, setCertificationData] = useState([emptyCer()]);
+    const [isLoading, setIsLoading] = useState(false);
+    const { token } = useAuth();
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const onChange = (index, e) => {
+        const { name, value } = e.target;
+        setCertificationData((prev) => {
+            const updated = [...prev];
+            updated[index] = {...updated[index], [name]: value};
+            return updated;
         });
+    };
 
-            const [isLoading, setIsLoading] = useState(false);
-            const { token } = useAuth();
-            const { id } = useParams();
-            const navigate = useNavigate();
-        
-            const onChange = (e) => {
-                const { name, value } = e.target;
-                setNewCertificationData((newCertificationData) => ({
-                    ...newCertificationData, [name]: value,
-                }));
-            };
-        
-            const onSubmit = async (e) => {
-                e.preventDefault();
+    const AddForm = () => {
+        setCertificationData((prev) => [...prev, emptyCer()])
+    }
 
-                const payload = {
-                    name: newCertificationData.name,
-                    description: newCertificationData.description,
-                    date: new Date(newCertificationData.date).toISOString(), // Преобразование в ISO 8601
-                    url: newCertificationData.url,
-                    type: newCertificationData.type,
-                    validTo: new Date(newCertificationData.validTo).toISOString(), // Преобразование в ISO 8601
-                    status: "NotStarted",
-                };
-        
-                setIsLoading(true);
-                try {
-                    const response = await AddCertification(payload, token, id);
-                    console.log('Sending certification info:', payload);
-                    if (response.ok) {
-                        navigate(`/cv/${id}/reference`);
-                        console.log('Successfully set certification info');
-                    }
-                }catch (error) {
-                    console.error('Certification info error:', error);
-                } finally {
-                    setIsLoading(false);
-                }
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        const payload = certificationData.map((cer) => ({
+            name: cer.name,
+            description: cer.description,
+            date: new Date(cer.date).toISOString(),
+            url: cer.url,
+            type: cer.type,
+            validTo: new Date(cer.validTo).toISOString(),
+            status: "NotStarted",
+        }));
+
+        setIsLoading(true);
+        try {
+            await Promise.all(payload.map((cer) => AddCertification(cer, token, id)));
+            console.log('Sending certification info:', payload);
+            navigate(`/cv/${id}/reference`);
+            console.log('Successfully set certification info');
+        }catch (error) {
+            console.error('Certification info error:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return(
@@ -68,40 +74,18 @@ const StageCertificationInfo = () => {
                 </div>
                 <div className="cv-form">
                     <form>
-                        <h2>Certification info</h2>
-                        <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
-                        </div>
-    
-                        <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
-                        </div>
-    
-                        <div className="input-group">
-                            <label htmlFor="date">Date:</label>
-                            <input type="date" id="date" name="date" onChange={onChange} />
-                        </div>
-    
-                        <div className="input-group">
-                            <label htmlFor="url">Url:</label>
-                            <input type="url" id="url" name="url" onChange={onChange} />
-                        </div>
-    
-                        <div className="input-group">
-                            <label htmlFor="type">Type:</label>
-                            <input id="type" name="type" onChange={onChange} />
-                        </div>
-    
-                        <div className="input-group">
-                            <label htmlFor="validTo">Valid to:</label>
-                            <input type="date" id="validTo" name="validTo" onChange={onChange}></input>
-                        </div>
-    
+                        {certificationData.map((cer, index) => (
+                            <CvFormCertification
+                                key={index}
+                                index={index}
+                                onChange={onChange}
+                                cerData={cer}
+                            />
+                        ))}
+                        <button type="button" className="add-form-btn" onClick={AddForm}>Add certification</button>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-experience-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
+                            <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
                         </div>
                     </form>
                 </div>
