@@ -36,6 +36,10 @@ const StageSkillsInfo = () => {
         setSkillsData((prev) => [...prev, emptySkl()]);
     }
 
+    const deleteForm = (index) => {
+        setEducationData((prev) => prev.filter((_, i) => i !== index));
+    }
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -75,6 +79,7 @@ const StageSkillsInfo = () => {
                                 key={index}
                                 index={index}
                                 onChange={onChange}
+                                onRemove={() => deleteForm(index)}
                                 sklData={skl}
                             />
                         ))}

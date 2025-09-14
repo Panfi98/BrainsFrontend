@@ -1,4 +1,4 @@
-export function CvFormSkills ({index, sklData, onChange}) {
+export function CvFormSkills ({index, sklData, onChange, onRemove}) {
     return(
         <div>
             <h2>Skills info {index + 1}</h2>
@@ -48,6 +48,7 @@ export function CvFormSkills ({index, sklData, onChange}) {
                     <option value="3">Apper Intermidiater</option>
                 </select>
             </div>
+            <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
         </div>
     );
 }

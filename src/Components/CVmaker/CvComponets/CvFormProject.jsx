@@ -1,6 +1,6 @@
-export function CvFormProject ({index, onChange, projData}) {
+export function CvFormProject ({index, onChange, projData, onRemove}) {
     return(
-        <form>
+        <div>
             <h2>Project info {index + 1}</h2>
             <div className="input-group">
                 <label htmlFor="name">Name:</label>
@@ -70,6 +70,7 @@ export function CvFormProject ({index, onChange, projData}) {
                     </div>
                 </div>
             </div>
-        </form>
+            <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
+        </div>
     )
 }

@@ -41,6 +41,10 @@ const StageEducationInfo = () => {
         setEducationData((prev) => [...prev, emptyEdu()])
     }
 
+    const deleteForm = (index) => {
+        setEducationData((prev) => prev.filter((_, i) => i !== index));
+    }
+
     const onSubmit = async (e) => {
         e.preventDefault();
     
@@ -84,10 +88,11 @@ const StageEducationInfo = () => {
                                 key={index}
                                 index={index} 
                                 onChange={onChange}
+                                onRemove={() => deleteForm(index)}
                                 eduData = {edu}
                             />
                         ))}
-                        <button className="add-form-btn" onClick={addForm}>Add education</button>
+                        <button type="button" className="add-form-btn" onClick={addForm}>Add education</button>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>

@@ -37,6 +37,10 @@ const StageProjectInfo = () => {
         setProjectData((prev) => [...prev, {emptyProj}])
     }
 
+    const deleteForm = (index) => {
+        setEducationData((prev) => prev.filter((_, i) => i !== index));
+    }
+    
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -71,18 +75,22 @@ const StageProjectInfo = () => {
                     <h2>Stage 3</h2>
                 </div>
                 <div className="cv-form">
-                    {projectData.map((proj, index) => (
-                        <CvFormProject
-                            key={index}
-                            index={index}
-                            projData={proj}
-                            onChange={onChange} />
-                    ))}
-                    <button className="add-form-btn" onClick={addForm}>Add education</button>
-                    <div className="button-group">
-                        <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
-                        <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
-                    </div> 
+                    <form onSubmit={onSubmit}>
+                        {projectData.map((proj, index) => (
+                            <CvFormProject
+                                key={index}
+                                index={index}
+                                projData={proj}
+                                onChange={onChange}
+                                onRemove={() => deleteForm(index)} 
+                            />
+                        ))}
+                        <button className="add-form-btn" onClick={addForm}>Add education</button>
+                        <div className="button-group">
+                            <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div className="cv-tips">

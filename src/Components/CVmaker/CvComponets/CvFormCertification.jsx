@@ -1,4 +1,4 @@
-export function CvFormCertification ({index, onChange, cerData}) {
+export function CvFormCertification ({index, onChange, cerData, onRemove}) {
     return(
         <div>
             <h2>Certification info {index + 1}</h2>
@@ -66,6 +66,7 @@ export function CvFormCertification ({index, onChange, cerData}) {
                     value={cerData.validTo}
                 />
             </div>
+            <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
         </div>
     )
 }

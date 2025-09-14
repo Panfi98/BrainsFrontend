@@ -1,4 +1,4 @@
-export function CvFormReference({ index, refData, onChange }) {
+export function CvFormReference({ index, refData, onChange, onRemove }) {
   return (
     <div className="reference-block">
       <div className="reference-block__header">
@@ -63,6 +63,7 @@ export function CvFormReference({ index, refData, onChange }) {
           required
         />
       </div>
+      <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
     </div>
   );
 }

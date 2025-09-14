@@ -40,6 +40,10 @@ const StageExperienceInfo = () => {
         setExperienceData((prev) => [...prev, emptyExp()])
     }
 
+    const deleteForm = (index) => {
+        setEducationData((prev) => prev.filter((_, i) => i !== index));
+    }
+
     const onSubmit = async (e) => {
             e.preventDefault();
     
@@ -83,6 +87,7 @@ const StageExperienceInfo = () => {
                                 key={index}
                                 index={index}
                                 onChange={onChange}
+                                onRemove={() => deleteForm(index)}
                                 expData={exp}
                             />
                         ))}

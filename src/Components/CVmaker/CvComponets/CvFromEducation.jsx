@@ -1,4 +1,4 @@
-export function CvFormEducation ({index, onChange, eduData}) {
+export function CvFormEducation ({index, onChange, eduData, onRemove}) {
     return(
         <div className="education-block">
             <h3>Education #{index + 1}</h3>
@@ -116,6 +116,7 @@ export function CvFormEducation ({index, onChange, eduData}) {
                         />
                         <label htmlFor={`non_active_${index}`}>Not active</label>
                     </div>
+                    <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
                 </div>
             </div>
         </div>

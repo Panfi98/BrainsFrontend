@@ -1,4 +1,4 @@
-export function CvFormExperience ({index, onChange, expData}) {
+export function CvFormExperience ({index, onChange, expData, onRemove}) {
     return (
         <div>
             <h2>Experience {index + 1}</h2>
@@ -103,6 +103,7 @@ export function CvFormExperience ({index, onChange, expData}) {
                     </div>
                 </div>
             </div>
+            <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
         </div>
     );
 }

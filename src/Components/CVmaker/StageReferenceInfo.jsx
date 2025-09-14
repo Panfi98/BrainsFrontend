@@ -35,6 +35,10 @@ const StageReferenceInfo = () => {
         setNewReferenceData((prev) => [...prev, emptyRef()]);
     };
 
+    const deleteForm = (index) => {
+        setEducationData((prev) => prev.filter((_, i) => i !== index));
+    }
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -66,7 +70,9 @@ const StageReferenceInfo = () => {
                                 key={index}
                                 index={index}
                                 refData={ref}
-                                onChange={onChange} />
+                                onChange={onChange} 
+                                onRemove={() => deleteForm(index)}
+                            />
                         ))}
                         <div className="button-row">
                             <button type="button" className="secondary" onClick={addReferenceRow}>Add reference</button>
