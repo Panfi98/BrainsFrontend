@@ -36,7 +36,7 @@ const StageReferenceInfo = () => {
     };
 
     const deleteForm = (index) => {
-        setEducationData((prev) => prev.filter((_, i) => i !== index));
+        setNewReferenceData((prev) => prev.filter((_, i) => i !== index));
     }
 
     const onSubmit = async (e) => {
@@ -75,7 +75,7 @@ const StageReferenceInfo = () => {
                             />
                         ))}
                         <div className="button-row">
-                            <button type="button" className="secondary" onClick={addReferenceRow}>Add reference</button>
+                            <button type="button" className="add-form-btn" onClick={addReferenceRow}>Add reference</button>
                         </div>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-certification-info")} className="previous-btn">Previous stage</button>

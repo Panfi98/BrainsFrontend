@@ -39,7 +39,7 @@ const StageCertificationInfo = () => {
     }
 
     const deleteForm = (index) => {
-        setEducationData((prev) => prev.filter((_, i) => i !== index));
+        setCertificationData((prev) => prev.filter((_, i) => i !== index));
     }
 
     const onSubmit = async (e) => {

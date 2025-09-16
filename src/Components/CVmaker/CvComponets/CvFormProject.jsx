@@ -1,6 +1,8 @@
+import TextareaAutosize from "react-textarea-autosize";
+
 export function CvFormProject ({index, onChange, projData, onRemove}) {
     return(
-        <div>
+        <div className="cv-block">
             <h2>Project info {index + 1}</h2>
             <div className="input-group">
                 <label htmlFor="name">Name:</label>
@@ -8,18 +10,19 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                     type="text" 
                     id={`name_${index}`} 
                     name="name" 
-                    onChange={(e) => onChange(index, e)} 
+                    onChange={onChange}  
                     value={projData.name}
                 />
             </div>
 
             <div className="input-group">
                 <label htmlFor={`description_${index}`} >Description:</label>
-                <textarea 
+                <TextareaAutosize 
                     id={`description_${index}`} 
                     name="description" 
-                    onChange={(e) => onChange(index, e)} 
+                    onChange={onChange} 
                     value={projData.description}
+                    minRows={3} maxRows={10}
                 />
             </div>
 
@@ -29,7 +32,7 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                     type="date"
                     id={`startDate_${index}`} 
                     name="startDate" 
-                    onChange={(e) => onChange(index, e)} 
+                    onChange={onChange} 
                     value={projData.startDate}
                 />
             </div>
@@ -40,7 +43,7 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                     type="date"
                     id={`endDate_${index}`} 
                     name="endDate" 
-                    onChange={(e) => onChange(index, e)} 
+                    onChange={onChange} 
                     value={projData.endDate}
                 />
             </div>
@@ -52,9 +55,9 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                         <input 
                             type="radio" 
                             id={`completed_${index}`} 
-                            name="active" 
+                            name={`completed_${index}`} 
                             value={true}
-                            onChange={(e) => onChange(index, e)}
+                            onChange={onChange} 
                         />
                         <label htmlFor={`completed_${index}`}>Completed</label>
                     </div>
@@ -62,9 +65,9 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                         <input
                             type="radio"
                             id={`non_completed_${index}`} 
-                            name="active" 
+                            name={`completed_${index}`}
                             value={false}
-                            onChange={(e) => onChange(index, e)}
+                            onChange={onChange} 
                         />
                         <label htmlFor={`non_completed_${index}`} >Non completed</label>
                     </div>

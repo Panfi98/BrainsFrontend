@@ -1,7 +1,7 @@
 export function CvFormEducation ({index, onChange, eduData, onRemove}) {
     return(
-        <div className="education-block">
-            <h3>Education #{index + 1}</h3>
+        <div className="cv-block">
+            <h2>Education {index + 1}</h2>
 
             <div className="input-group">
                 <label htmlFor={`name_${index}`}>Name:</label>
@@ -59,7 +59,7 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                     required
                 > 
                     <option value="none">None</option>
-                    <option value="bachelor">Bachelor</option>
+                    <option value="bachelorgrad">Bachelorgrad</option>
                     <option value="master">Master</option>
                     <option value="phd">PhD</option>
                 </select>
@@ -100,7 +100,7 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                         <input 
                             type="radio" 
                             id={`active_${index}`} 
-                            name="active" 
+                            name={`active_${index}`}
                             value={true}
                             onChange={(e) => onChange(index, e)}
                         />
@@ -110,15 +110,15 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                         <input 
                             type="radio" 
                             id={`non_active_${index}`} 
-                            name="active" 
+                            name={`active_${index}`} 
                             value={false}
                             onChange={(e) => onChange(index, e)}
                         />
                         <label htmlFor={`non_active_${index}`}>Not active</label>
                     </div>
-                    <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
                 </div>
             </div>
+            <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
         </div>
     )
 }

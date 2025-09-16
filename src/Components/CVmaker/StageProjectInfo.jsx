@@ -34,13 +34,13 @@ const StageProjectInfo = () => {
     };
 
     const addForm = () => {
-        setProjectData((prev) => [...prev, {emptyProj}])
+        setProjectData((prev) => [...prev, emptyProj()])
     }
 
     const deleteForm = (index) => {
-        setEducationData((prev) => prev.filter((_, i) => i !== index));
+        setProjectData((prev) => prev.filter((_, i) => i !== index));
     }
-    
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -81,11 +81,11 @@ const StageProjectInfo = () => {
                                 key={index}
                                 index={index}
                                 projData={proj}
-                                onChange={onChange}
+                                onChange={onChange(index)}
                                 onRemove={() => deleteForm(index)} 
                             />
                         ))}
-                        <button className="add-form-btn" onClick={addForm}>Add education</button>
+                        <button type="button" className="add-form-btn" onClick={addForm}>Add education</button>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>

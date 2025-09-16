@@ -1,6 +1,8 @@
+import TextareaAutosize from "react-textarea-autosize";
+
 export function CvFormExperience ({index, onChange, expData, onRemove}) {
     return (
-        <div>
+        <div className="cv-block"> 
             <h2>Experience {index + 1}</h2>
             <div className="input-group">
                 <label htmlFor={`name_${index}`}>Name:</label>
@@ -48,11 +50,12 @@ export function CvFormExperience ({index, onChange, expData, onRemove}) {
 
             <div className="input-group">
                 <label htmlFor={`description_${index}`}>Description:</label>
-                <textarea 
+                <TextareaAutosize 
                     id={`description_${index}`} 
                     name="description" 
                     onChange={(e) => onChange(index, e)} 
                     value={expData.description}
+                    minRows={3} maxRows={10}
                 />
             </div>
 
@@ -85,7 +88,7 @@ export function CvFormExperience ({index, onChange, expData, onRemove}) {
                         <input 
                             type="radio" 
                             id={`active_${index}`} 
-                            name="active" 
+                            name={`active_${index}`}
                             onChange={(e) => onChange(index, e)} 
                             value={true}
                         />
@@ -95,7 +98,7 @@ export function CvFormExperience ({index, onChange, expData, onRemove}) {
                         <input 
                             type="radio" 
                             id={`non_active_${index}`} 
-                            name="active" 
+                            name={`active_${index}`}
                             onChange={(e) => onChange(index, e)} 
                             value={false}
                         />

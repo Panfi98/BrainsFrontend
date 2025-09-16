@@ -1,8 +1,8 @@
 export function CvFormReference({ index, refData, onChange, onRemove }) {
   return (
-    <div className="reference-block">
-      <div className="reference-block__header">
-        <h3>Reference #{index + 1}</h3>
+    <div className="cv-block">
+      <div>
+        <h2>Reference {index + 1}</h2>
       </div>
 
       <div className="input-group">

@@ -37,7 +37,7 @@ const StageSkillsInfo = () => {
     }
 
     const deleteForm = (index) => {
-        setEducationData((prev) => prev.filter((_, i) => i !== index));
+        setSkillsData((prev) => prev.filter((_, i) => i !== index));
     }
 
     const onSubmit = async (e) => {

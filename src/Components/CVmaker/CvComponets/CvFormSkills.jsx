@@ -1,7 +1,9 @@
+import TextareaAutosize from "react-textarea-autosize";
+
 export function CvFormSkills ({index, sklData, onChange, onRemove}) {
     return(
-        <div>
-            <h2>Skills info {index + 1}</h2>
+        <div className="cv-block">
+            <h2>Skill {index + 1}</h2>
             <div className="input-group">
                 <label htmlFor={`name_${index}`}>Name:</label>
                 <input 
@@ -15,11 +17,12 @@ export function CvFormSkills ({index, sklData, onChange, onRemove}) {
 
             <div className="input-group">
                 <label htmlFor={`description_${index}`} >Description:</label>
-                <textarea 
+                <TextareaAutosize 
                     id={`description_${index}`} 
                     name="description" 
                     onChange={(e) => onChange(index, e)} 
-                    value={sklData.description}  
+                    value={sklData.description} 
+                    minRows={3} maxRows={10}
                 />
             </div>
 

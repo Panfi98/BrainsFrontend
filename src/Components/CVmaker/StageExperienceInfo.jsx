@@ -41,7 +41,7 @@ const StageExperienceInfo = () => {
     }
 
     const deleteForm = (index) => {
-        setEducationData((prev) => prev.filter((_, i) => i !== index));
+        setExperienceData((prev) => prev.filter((_, i) => i !== index));
     }
 
     const onSubmit = async (e) => {
