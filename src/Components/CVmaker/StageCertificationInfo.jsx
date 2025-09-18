@@ -1,12 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddCertification } from "../../Fetcher/AddCertification.js";
+import { GetCertificationsById } from "../../Fetcher/GetCertification.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormCertification } from "./CvComponets/CvFormCertification.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 
 const emptyCer = () => ({
     name: "",
@@ -19,27 +21,59 @@ const emptyCer = () => ({
 })
 
 const StageCertificationInfo = () => {
-    const [certificationData, setCertificationData] = useState([emptyCer()]);
+
+    const {resumeData, setResumeData} = useResume();
+    const [certificationData, setCertificationData] = useState(
+        resumeData.certifications.length > 0 ? resumeData.certifications : [emptyCer()]);
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
+
+    useEffect (() => {
+        const GetCertification = async () => {
+            try{
+                const data = await GetCertificationsById(id, token);
+                if (data && data.length > 0) {
+                    setResumeData(prev => ({ ...prev, certifications: data }));
+                    setCertificationData(data);
+                }
+            }catch(err){
+                console.error(err)
+            }
+        }
+        if(resumeData.certifications.length === 0){
+            GetCertification();
+        }
+    }, [id, token, setResumeData]);
 
     const onChange = (index, e) => {
         const { name, value } = e.target;
         setCertificationData((prev) => {
             const updated = [...prev];
             updated[index] = {...updated[index], [name]: value};
-            return updated;
+                setResumeData((resume) => ({
+            ...resume, certifications:updated,
+        }))
+
+        return updated;
         });
     };
 
     const AddForm = () => {
-        setCertificationData((prev) => [...prev, emptyCer()])
+        setCertificationData((prev) => {
+            const updated = [...prev, emptyCer()];
+            setResumeData((resume) => ({...resume, certifications: updated}))
+            return updated;
+        });
     }
 
     const deleteForm = (index) => {
-        setCertificationData((prev) => prev.filter((_, i) => i !== index));
+        setCertificationData((prev) => {
+            const updated = prev.filter((_, i) => i !== index);
+            setResumeData((resume) => ({...resume, certifications: updated}))
+            return updated;
+        })
     }
 
     const onSubmit = async (e) => {

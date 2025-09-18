@@ -73,7 +73,7 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                     </div>
                 </div>
             </div>
-            <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>
+            <button type="button" className="del-form-btn" onClick={onRemove}>Remove project</button>
         </div>
     )
 }

@@ -1,10 +1,11 @@
-import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddEducation } from "../../Fetcher/AddEducation.js";
+import { GetEducationById } from "../../Fetcher/GetEducation.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormEducation } from "./CvComponets/CvFromEducation.jsx";
 
@@ -22,27 +23,59 @@ const emptyEdu = () => ({
 
 const StageEducationInfo = () => {
 
-    const [educationData, setEducationData] = useState([emptyEdu()]);
+    const {resumeData, setResumeData} = useResume();
+    const [educationData, setEducationData] = useState(
+        resumeData.educations.length > 0 ? resumeData.educations : [emptyEdu()]);
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const GetEducation = async () => {
+            try{
+                const data = await GetEducationById(id, token);
+                if (data && data.length > 0) {
+                    setResumeData(prev => ({ ...prev, educations: data }));
+                    setEducationData(data);
+                }
+            }catch(err){
+                console.error(err)
+            }
+        }
+        if(resumeData.educations.length === 0){
+            GetEducation();
+        }
+    }, [id, token, setResumeData]);
 
     const onChange = (index, e) => {
         const { name, value } = e.target;
         setEducationData((prev) => {
             const updated = [...prev];
             updated[index] = {...updated[index], [name]: value};
+
+        setResumeData((resume) => ({
+            ...resume, educations: updated,
+        }))
+
             return updated;
         });
     };
 
     const addForm = () => {
-        setEducationData((prev) => [...prev, emptyEdu()])
+        setEducationData((prev) => {
+            const updated = [...prev, emptyEdu()];
+            setResumeData((resume) => ({...resume, educations: updated}))
+            return updated;
+        });
     }
 
     const deleteForm = (index) => {
-        setEducationData((prev) => prev.filter((_, i) => i !== index));
+        setEducationData((prev) => {
+            const updated = prev.filter((_, i) => i !== index);
+            setResumeData((resume) => ({...resume, educations: updated}))
+            return updated;
+        })
     }
 
     const onSubmit = async (e) => {

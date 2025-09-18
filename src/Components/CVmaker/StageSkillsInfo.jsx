@@ -1,12 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
 import { AddSkills } from "../../Fetcher/AddSkills.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormSkills } from "./CvComponets/CvFormSkills.jsx";
+import { GetSkillsById } from "../../Fetcher/GetSkills.js";
 
 const emptySkl = () => ({
     name: "",
@@ -17,27 +19,59 @@ const emptySkl = () => ({
 })
 
 const StageSkillsInfo = () => {
-    const [skillsData, setSkillsData] = useState([emptySkl()]);
+    const {resumeData, setResumeData} = useResume();
+    const [skillsData, setSkillsData] = useState(
+        resumeData.skills.length > 0 ? resumeData.skills : [emptySkl()]);
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
+
+    useEffect (() => {
+        const GetSkills = async () => {
+            try{
+                const data = await GetSkillsById(id, token);
+                if (data && data.length > 0) {
+                    setResumeData(prev => ({ ...prev, skills: data }));
+                    setSkillsData(data);
+                }
+            }catch(err){
+                console.error(err)
+            }
+        }
+        if(resumeData.skills.length === 0){
+            GetSkills();
+        }
+    }, [id, token, setResumeData]);
     
     const onChange = (index, e) => {
         const { name, value } = e.target;
         setSkillsData((prev) => {
             const updated = [...prev];
             updated[index] = { ...updated[index], [name]: value };
-            return updated;
+            
+        setResumeData((resume) => ({
+            ...resume, skills:updated,
+        }))
+        
+        return updated;
         });
     };
-
-    const addSkill = () => {
-        setSkillsData((prev) => [...prev, emptySkl()]);
+    
+    const addForm = () => {
+        setSkillsData((prev) => {
+            const updated = [...prev, emptySkl()];
+            setResumeData((resume) => ({...resume, skills: updated}))
+            return updated;
+        });
     }
 
     const deleteForm = (index) => {
-        setSkillsData((prev) => prev.filter((_, i) => i !== index));
+        setSkillsData((prev) => {
+            const updated = prev.filter((_, i) => i !== index);
+            setResumeData((resume) => ({...resume, skills: updated}))
+            return updated;
+        })
     }
 
     const onSubmit = async (e) => {
@@ -84,7 +118,7 @@ const StageSkillsInfo = () => {
                             />
                         ))}
                         <div>
-                            <button type="button" className="add-form-btn" onClick={addSkill}>Add skill</button>
+                            <button type="button" className="add-form-btn" onClick={addForm}>Add skill</button>
                         </div>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-projects-info")} className="previous-btn">Previous stage</button>

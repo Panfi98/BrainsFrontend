@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddReference } from "../../Fetcher/AddReference.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormReference } from "./CvComponets/CvFormReference.jsx";
+import { GetReferencesById } from "../../Fetcher/GetReference.js";
+import { useResume } from "../../Context/ResumeContext.jsx";
 
 const emptyRef = () => ({
   firstName: "",
@@ -16,27 +18,60 @@ const emptyRef = () => ({
 });
 
 const StageReferenceInfo = () => {
-    const [newReferenceData, setNewReferenceData] = useState([emptyRef()]);
+
+    const {resumeData, setResumeData} = useResume();
+    const [referenceData, setReferenceData] = useState(
+        resumeData.references.length > 0 ? resumeData.references :[emptyRef()]);
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
 
+    useEffect (() => {
+            const GetReference = async () => {
+                try{
+                    const data = await GetReferencesById(id, token);
+                    if (data && data.length > 0) {
+                        setResumeData(prev => ({ ...prev, references: data }));
+                        setReferenceData(data);
+                    }
+                }catch(err){
+                    console.error(err)
+                }
+            }
+            if(resumeData.references.length === 0){
+                GetReference();
+            }
+        }, [id, token, setResumeData]);
+
     const onChange = (index, e) => {
         const { name, value } = e.target;
-        setNewReferenceData((prev) => {
+        setReferenceData((prev) => {
             const updated = [...prev];
             updated[index] = { ...updated[index], [name]: value };
+            
+            setResumeData((resume) => ({
+            ...resume, references:updated,
+        }))
+
+        return updated;
+        });
+    };
+
+    const addForm = () => {
+        setReferenceData((prev) => {
+            const updated = [...prev, emptyRef()];
+            setResumeData((resume) => ({...resume, references: updated}))
             return updated;
         });
     };
 
-    const addReferenceRow = () => {
-        setNewReferenceData((prev) => [...prev, emptyRef()]);
-    };
-
     const deleteForm = (index) => {
-        setNewReferenceData((prev) => prev.filter((_, i) => i !== index));
+        setReferenceData((prev) => {
+            const updated = prev.filter((_, i) => i !== index);
+            setResumeData((resume) => ({...resume, references: updated}))
+            return updated;
+        })
     }
 
     const onSubmit = async (e) => {
@@ -44,8 +79,8 @@ const StageReferenceInfo = () => {
 
         setIsLoading(true);
         try {
-            await Promise.all(newReferenceData.map((ref) => AddReference(ref, token, id)));
-            console.log('Sending reference info:', newReferenceData);
+            await Promise.all(referenceData.map((ref) => AddReference(ref, token, id)));
+            console.log('Sending reference info:', referenceData);
             navigate(`/cv/${id}/my-cv`);
             console.log('Successfully set reference info');
         }catch (error) {
@@ -65,7 +100,7 @@ const StageReferenceInfo = () => {
                 </div>
                 <div className="cv-form">
                     <form onSubmit={onSubmit}>
-                        {newReferenceData.map((ref, index) => (
+                        {referenceData.map((ref, index) => (
                             <CvFormReference
                                 key={index}
                                 index={index}
@@ -75,7 +110,7 @@ const StageReferenceInfo = () => {
                             />
                         ))}
                         <div className="button-row">
-                            <button type="button" className="add-form-btn" onClick={addReferenceRow}>Add reference</button>
+                            <button type="button" className="add-form-btn" onClick={addForm}>Add reference</button>
                         </div>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-certification-info")} className="previous-btn">Previous stage</button>

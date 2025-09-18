@@ -1,10 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
 import { AddExperience } from "../../Fetcher/AddExperience.js";
+import { GetExperiencesById } from "../../Fetcher/GetExperience.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormExperience } from "./CvComponets/CvFormExperience.jsx";
 
@@ -21,27 +23,60 @@ const emptyExp = () => ({
 });
 
 const StageExperienceInfo = () => {
-    const [experienceData, setExperienceData] = useState([emptyExp()]); 
+    const {resumeData, setResumeData} = useResume();
+    const [experienceData, setExperienceData] = useState(
+        resumeData.experiences.length > 0 ? resumeData.experiences : [emptyExp()]); 
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
+
+    useEffect (() => {
+        const GetExperience = async () => {
+            try{
+                const data = await GetExperiencesById(id, token);
+                if (data && data.length > 0) {
+                    setResumeData(prev => ({ ...prev, projects: data }));
+                    setExperienceData(data);
+                }
+            }catch(err){
+                console.error(err)
+            }
+        }
+        if(resumeData.experiences.length === 0){
+            GetExperience();
+        }
+    }, [id, token, setResumeData]);
 
     const onChange = (index, e) => {
         const { name, value } = e.target;
         setExperienceData((prev) => {
             const updated = [...prev];
             updated[index] = {...updated[index], [name]: value};
-            return updated;
+            
+            setResumeData((resume) => ({
+            ...resume, experiences:updated,
+        }))
+
+        return updated;
         });
     };
 
     const AddExperience = () => {
-        setExperienceData((prev) => [...prev, emptyExp()])
+        setExperienceData((prev) => {
+            const updated = [...prev, emptyExp()];
+            setResumeData((resume) => ({...resume, experiences: updated}))
+            return updated;
+        });
     }
 
+
     const deleteForm = (index) => {
-        setExperienceData((prev) => prev.filter((_, i) => i !== index));
+        setExperienceData((prev) => {
+            const updated = prev.filter((_, i) => i !== index);
+            setResumeData((resume) => ({...resume, projects: updated}))
+            return updated;
+        })
     }
 
     const onSubmit = async (e) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import './CVmaker.css';
 import { AddProject } from "../../Fetcher/AddProject.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormProject } from "./CvComponets/CvFormProject.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
+import { GetProjectsById } from "../../Fetcher/GetProjects.js";
 
 const emptyProj = () => ({
     name: "",
@@ -18,27 +20,60 @@ const emptyProj = () => ({
 });
 
 const StageProjectInfo = () => {
-    const [projectData, setProjectData] = useState([emptyProj()]);
+
+    const {resumeData, setResumeData} = useResume();
+    const [projectData, setProjectData] = useState(
+        resumeData.projects.length > 0 ? resumeData.projects : [emptyProj()]);
     const [isLoading, setIsLoading] = useState(false);
     const { id } = useParams();
     const { token } = useAuth();
     const navigate = useNavigate();
+
+    useEffect (() => {
+        const GetProject = async () => {
+            try{
+                const data = await GetProjectsById(id, token);
+                if (data && data.length > 0) {
+                    setResumeData(prev => ({ ...prev, projects: data }));
+                    setProjectData(data);
+                }
+            }catch(err){
+                console.error(err)
+            }
+        }
+        if(resumeData.projects.length === 0){
+            GetProject();
+        }
+    }, [id, token, setResumeData]);
 
     const onChange = (index) => (e) => {
         const { name, value } = e.target;
         setProjectData((prev) => {
             const updated = [...prev];
             updated[index] = {...updated[index], [name]: value};
-            return updated;
+        
+        setResumeData((resume) => ({
+            ...resume, projects:updated,
+        }))
+
+        return updated;
         });
     };
 
     const addForm = () => {
-        setProjectData((prev) => [...prev, emptyProj()])
+        setProjectData((prev) => {
+            const updated = [...prev, emptyProj()];
+            setResumeData((resume) => ({...resume, projects: updated}))
+            return updated;
+        });
     }
 
     const deleteForm = (index) => {
-        setProjectData((prev) => prev.filter((_, i) => i !== index));
+        setProjectData((prev) => {
+            const updated = prev.filter((_, i) => i !== index);
+            setResumeData((resume) => ({...resume, projects: updated}))
+            return updated;
+        })
     }
 
     const onSubmit = async (e) => {
@@ -85,7 +120,7 @@ const StageProjectInfo = () => {
                                 onRemove={() => deleteForm(index)} 
                             />
                         ))}
-                        <button type="button" className="add-form-btn" onClick={addForm}>Add education</button>
+                        <button type="button" className="add-form-btn" onClick={addForm}>Add project</button>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
