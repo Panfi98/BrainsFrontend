@@ -1,5 +1,11 @@
 import TextareaAutosize from "react-textarea-autosize";
 
+const toDateInputValue = (dateString) => {
+    if(!dateString) return "";
+    const d = new Date(dateString);
+    return d.toISOString().split("T")[0];
+}
+
 export function CvFormProject ({index, onChange, projData, onRemove}) {
     return(
         <div className="cv-block">
@@ -33,7 +39,7 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                     id={`startDate_${index}`} 
                     name="startDate" 
                     onChange={onChange} 
-                    value={projData.startDate}
+                    value={toDateInputValue(projData.startDate)}
                 />
             </div>
 
@@ -44,7 +50,7 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                     id={`endDate_${index}`} 
                     name="endDate" 
                     onChange={onChange} 
-                    value={projData.endDate}
+                    value={toDateInputValue(projData.endDate)}
                 />
             </div>
 

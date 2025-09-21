@@ -1,4 +1,11 @@
 export function CvFormEducation ({index, onChange, eduData, onRemove}) {
+    
+    const toDateInputValue = (dateString) => {
+        if(!dateString) return "";
+        const d = new Date(dateString);
+        return d.toISOString().split("T")[0];
+    }
+    
     return(
         <div className="cv-block">
             <h2>Education {index + 1}</h2>
@@ -32,7 +39,7 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                     id={`startDate_${index}`}
                     name="startDate" 
                     onChange={(e) => onChange(index, e)} 
-                    value={eduData.startDate}
+                    value={toDateInputValue(eduData.startDate)}
                     required
                 />
             </div>
@@ -44,7 +51,7 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                     id={`endDate_${index}`} 
                     name="endDate" 
                     onChange={(e) => onChange(index, e)}
-                    value={eduData.endDate}
+                    value={toDateInputValue(eduData.endDate)}
                     required
                 />
             </div>

@@ -1,5 +1,11 @@
 import TextareaAutosize from "react-textarea-autosize";
 
+const toDateInputValue = (dateString) => {
+    if(!dateString) return "";
+    const d = new Date(dateString);
+    return d.toISOString().split("T")[0];
+}
+
 export function CvFormCertification ({index, onChange, cerData, onRemove}) {
     return(
         <div className="cv-block">
@@ -33,7 +39,7 @@ export function CvFormCertification ({index, onChange, cerData, onRemove}) {
                     id={`date_${index}`} 
                     name="date" 
                     onChange={(e) => onChange(index, e)} 
-                    value={cerData.date}
+                    value={toDateInputValue(cerData.date)}
                 />
             </div>
 
@@ -66,7 +72,7 @@ export function CvFormCertification ({index, onChange, cerData, onRemove}) {
                     id={`validTo_${index}`} 
                     name="validTo" 
                     onChange={(e) => onChange(index, e)} 
-                    value={cerData.validTo}
+                    value={toDateInputValue(cerData.validTo)}
                 />
             </div>
             <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>

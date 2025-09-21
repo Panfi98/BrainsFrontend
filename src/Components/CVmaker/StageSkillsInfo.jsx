@@ -5,10 +5,10 @@ import { useResume } from "../../Context/ResumeContext.jsx";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import './CVmaker.css';
-import { AddSkills } from "../../Fetcher/AddSkills.js";
+import { AddSkills } from "../../Fetcher/PostFetcher/AddSkills.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormSkills } from "./CvComponets/CvFormSkills.jsx";
-import { GetSkillsById } from "../../Fetcher/GetSkills.js";
+import { GetSkillsById } from "../../Fetcher/GetFetcher/GetSkills.js";
 
 const emptySkl = () => ({
     name: "",

@@ -4,11 +4,11 @@ import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
-import { AddProject } from "../../Fetcher/AddProject.js";
+import { AddProject } from "../../Fetcher/PostFetcher/AddProject.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormProject } from "./CvComponets/CvFormProject.jsx";
 import { useResume } from "../../Context/ResumeContext.jsx";
-import { GetProjectsById } from "../../Fetcher/GetProjects.js";
+import { GetProjectsById } from "../../Fetcher/GetFetcher/GetProjects.js";
 
 const emptyProj = () => ({
     name: "",

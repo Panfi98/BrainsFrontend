@@ -2,7 +2,7 @@ import './SignUp.css'
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TextInput } from "../Input Field/TextInput.jsx";
-import { CreateUser } from "../../Fetcher/CreateUser.js";
+import { CreateUser } from "../../Fetcher/PostFetcher/CreateUser.js";
 import VeryficationEmail from "./VeryficationEmail.jsx";
 
 export function SignUp() {

@@ -5,8 +5,8 @@ import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
-import { AddExperience } from "../../Fetcher/AddExperience.js";
-import { GetExperiencesById } from "../../Fetcher/GetExperience.js";
+import { AddExperience } from "../../Fetcher/PostFetcher/AddExperience.js";
+import { GetExperiencesById } from "../../Fetcher/GetFetcher/GetExperience.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormExperience } from "./CvComponets/CvFormExperience.jsx";
 

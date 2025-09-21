@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import './CVmaker.css';
-import { AddReference } from "../../Fetcher/AddReference.js";
+import { AddReference } from "../../Fetcher/PostFetcher/AddReference.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormReference } from "./CvComponets/CvFormReference.jsx";
-import { GetReferencesById } from "../../Fetcher/GetReference.js";
+import { GetReferencesById } from "../../Fetcher/GetFetcher/GetReference.js";
 import { useResume } from "../../Context/ResumeContext.jsx";
 
 const emptyRef = () => ({

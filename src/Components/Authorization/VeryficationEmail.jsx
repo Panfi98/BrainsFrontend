@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
-import { Verification } from "../../Fetcher/Verification";
+import { Verification } from "../../Fetcher/PostFetcher/Verification";
 
 const VeryficationEmail = ({ userId }) => {
 

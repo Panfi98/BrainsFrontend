@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext.jsx";
-import { GetCvById } from "../../Fetcher/GetCv.js";
+import { GetCvById } from "../../Fetcher/GetFetcher/GetCv.js";
 import html2pdf from 'html2pdf.js';
 import './CvPage.css';
 

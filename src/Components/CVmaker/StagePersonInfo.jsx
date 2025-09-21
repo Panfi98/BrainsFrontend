@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import './CVmaker.css';
-import { CreatePerson } from "../../Fetcher/CreatePerson.js";
+import { CreatePerson } from "../../Fetcher/PostFetcher/CreatePerson.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 
 const StagePersonInfo = () => {

@@ -4,12 +4,15 @@ import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
-import { AddEducation } from "../../Fetcher/AddEducation.js";
-import { GetEducationById } from "../../Fetcher/GetEducation.js";
+import { AddEducation } from "../../Fetcher/PostFetcher/AddEducation.js";
+import { GetEducationById } from "../../Fetcher/GetFetcher/GetEducation.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormEducation } from "./CvComponets/CvFromEducation.jsx";
+import { UpdateEducation } from "../../Fetcher/PutFetcher/UpdateEducation.js";
+import { DeleteEducation } from "../../Fetcher/DeleteFetcher/DeleteEducation.js";
 
 const emptyEdu = () => ({
+  id: null,
   name: "",
   description: "",
   startDate: "",
@@ -70,18 +73,32 @@ const StageEducationInfo = () => {
         });
     }
 
-    const deleteForm = (index) => {
-        setEducationData((prev) => {
-            const updated = prev.filter((_, i) => i !== index);
-            setResumeData((resume) => ({...resume, educations: updated}))
-            return updated;
-        })
-    }
+    const deleteForm = async (index) => {
+        const toDelete = educationData[index];
+        const updated = educationData.filter((_, i) => i !== index);
+
+        setEducationData(updated);
+        setResumeData(r => ({ ...r, educations: updated }));
+
+        try {
+            if (toDelete?.id) await DeleteEducation(toDelete.id, token);
+        } catch (e) {
+            console.error("Feiled to delete: ", e);
+            setEducationData(prev => {
+            const roll = [...prev];
+            roll.splice(index, 0, toDelete);
+            return roll;
+            });
+            setResumeData(r => ({ ...r, educations: educationData }));
+        }
+    };
 
     const onSubmit = async (e) => {
         e.preventDefault();
-    
-        const payload = educationData.map((edu) => ({
+
+        const payload = educationData.filter((edu) => edu && edu.name?.trim() !== "")
+        .map((edu) => ({
+            id: edu.id ?? null,
             name: edu.name,
             type: edu.type,
             startDate: new Date(edu.startDate).toISOString(),
@@ -90,12 +107,22 @@ const StageEducationInfo = () => {
             degree: edu.degree,
             place: edu.place,
             active: edu.active === "true",
-            status: "NotStarted",
+            status: "InProgress",
         }));
 
         setIsLoading(true);
         try {
-            await Promise.all(payload.map((edu) => AddEducation(edu, token, id)));
+            console.log("Payload before submit:", payload);
+            console.log("Raw educationData:", educationData);
+            await Promise.all(payload.map((edu) => {
+                if (edu.id !== null && edu.id !== undefined) {
+                    return UpdateEducation(
+                        {educationId: edu.id,
+                        educationData: edu,
+                        token: token});
+                }else{
+                    return AddEducation(edu, token, id)
+                }}));
             console.log("Sending education info:", payload);
             navigate(`/cv/${id}/projects`);
             console.log("Successfully set education infof");
@@ -128,7 +155,7 @@ const StageEducationInfo = () => {
                         <button type="button" className="add-form-btn" onClick={addForm}>Add education</button>
                         <div className="button-group">
                             <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
+                            <button type="submit" className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
                         </div>
                     </form>
                 </div>

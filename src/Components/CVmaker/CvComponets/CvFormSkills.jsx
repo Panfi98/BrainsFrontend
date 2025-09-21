@@ -1,5 +1,4 @@
 import TextareaAutosize from "react-textarea-autosize";
-
 export function CvFormSkills ({index, sklData, onChange, onRemove}) {
     return(
         <div className="cv-block">
