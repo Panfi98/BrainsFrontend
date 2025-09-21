@@ -7,14 +7,17 @@ import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormReference } from "./CvComponets/CvFormReference.jsx";
 import { GetReferencesById } from "../../Fetcher/GetFetcher/GetReference.js";
 import { useResume } from "../../Context/ResumeContext.jsx";
+import { UpdateReference } from "../../Fetcher/PutFetcher/UpdateReference.js";
+import { DeleteReference } from "../../Fetcher/DeleteFetcher/DeleteReference.js";
 
 const emptyRef = () => ({
-  firstName: "",
-  lastName: "",
-  position: "",
-  email: "",
-  phoneNumber: "",
-  status: "NotStarted",
+    id: 0,
+    firstName: "",
+    lastName: "",
+    position: "",
+    email: "",
+    phoneNumber: "",
+    status: "NotStarted",
 });
 
 const StageReferenceInfo = () => {
@@ -28,6 +31,9 @@ const StageReferenceInfo = () => {
     const navigate = useNavigate();
 
     useEffect (() => {
+        if (resumeData.references?.length > 0) {
+            setReferenceData(resumeData.references);
+        } else {
             const GetReference = async () => {
                 try{
                     const data = await GetReferencesById(id, token);
@@ -39,7 +45,6 @@ const StageReferenceInfo = () => {
                     console.error(err)
                 }
             }
-            if(resumeData.references.length === 0){
                 GetReference();
             }
         }, [id, token, setResumeData]);
@@ -49,12 +54,7 @@ const StageReferenceInfo = () => {
         setReferenceData((prev) => {
             const updated = [...prev];
             updated[index] = { ...updated[index], [name]: value };
-            
-            setResumeData((resume) => ({
-            ...resume, references:updated,
-        }))
-
-        return updated;
+            return updated;
         });
     };
 
@@ -66,21 +66,53 @@ const StageReferenceInfo = () => {
         });
     };
 
-    const deleteForm = (index) => {
-        setReferenceData((prev) => {
-            const updated = prev.filter((_, i) => i !== index);
-            setResumeData((resume) => ({...resume, references: updated}))
-            return updated;
-        })
-    }
+    const deleteForm = async (index) => {
+            const toDelete = referenceData[index];
+            const updated = referenceData.filter((_, i) => i !== index);
+    
+            setReferenceData(updated);
+            setResumeData(r => ({ ...r, references: updated }));
+    
+            try {
+                if (toDelete?.id) await DeleteReference(toDelete.id, token);
+            } catch (e) {
+                console.error("Feiled to delete: ", e);
+                setReferenceData(prev => {
+                const roll = [...prev];
+                roll.splice(index, 0, toDelete);
+                return roll;
+                });
+                setResumeData(r => ({ ...r, references: referenceData }));
+            }
+        };
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
+        const payload = referenceData.filter((ref) => ref && ref.name?.trim() !== "")
+        .map((ref) => ({
+            id: ref.id ?? 0,
+            firstName: ref.firstName,
+            lastName: ref.lastName,
+            position: ref.position,
+            email: ref.email,
+            phoneNumber: ref.phoneNumber,
+            status: "InProgress",
+        }));
+
         setIsLoading(true);
         try {
-            await Promise.all(referenceData.map((ref) => AddReference(ref, token, id)));
+            await Promise.all(payload.map((ref) => {
+                if (ref.id !== null && ref.id > 0){
+                    return UpdateReference(
+                    {referenceId: ref.id,
+                    referenceData: ref,
+                    token: token});
+                }else{
+                    return AddReference(ref, token, id)
+                }}));
             console.log('Sending reference info:', referenceData);
+            setResumeData(prev => ({ ...prev, references: payload }));
             navigate(`/cv/${id}/my-cv`);
             console.log('Successfully set reference info');
         }catch (error) {
@@ -113,7 +145,7 @@ const StageReferenceInfo = () => {
                             <button type="button" className="add-form-btn" onClick={addForm}>Add reference</button>
                         </div>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-certification-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate(`/cv/${id}/certification`)} className="previous-btn">Previous stage</button>
                             <button type="submit" className="next-btn" disabled={isLoading}>
                                 {isLoading ? 'Saving...' : 'Finish'}
                             </button>

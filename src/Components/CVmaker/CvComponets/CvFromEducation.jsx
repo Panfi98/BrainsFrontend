@@ -108,8 +108,10 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                             type="radio" 
                             id={`active_${index}`} 
                             name={`active_${index}`}
+                            checked={eduData.active === true}
                             value={true}
-                            onChange={(e) => onChange(index, e)}
+                            onChange={(e) => onChange(index, {
+                                target: { name: "active", value: true }})}
                         />
                         <label htmlFor={`active_${index}`}>Active</label>
                     </div>
@@ -118,8 +120,10 @@ export function CvFormEducation ({index, onChange, eduData, onRemove}) {
                             type="radio" 
                             id={`non_active_${index}`} 
                             name={`active_${index}`} 
+                            checked={eduData.active === false}
                             value={false}
-                            onChange={(e) => onChange(index, e)}
+                            onChange={(e) => onChange(index, {
+                                target: { name: "active", value: false }})}
                         />
                         <label htmlFor={`non_active_${index}`}>Not active</label>
                     </div>

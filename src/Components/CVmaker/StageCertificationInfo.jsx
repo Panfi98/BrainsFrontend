@@ -9,8 +9,11 @@ import { GetCertificationsById } from "../../Fetcher/GetFetcher/GetCertification
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormCertification } from "./CvComponets/CvFormCertification.jsx";
 import { useResume } from "../../Context/ResumeContext.jsx";
+import { UpdateCertification } from "../../Fetcher/PutFetcher/UpdateCertification.js";
+import { DeleteCertification } from "../../Fetcher/DeleteFetcher/DeleteCertification.js";
 
 const emptyCer = () => ({
+    id: 0,
     name: "",
     description: "",
     date: "",
@@ -31,7 +34,10 @@ const StageCertificationInfo = () => {
     const navigate = useNavigate();
 
     useEffect (() => {
-        const GetCertification = async () => {
+        if (resumeData.certifications?.length > 0) {
+            setCertificationData(resumeData.certifications);
+        } else {
+            const GetCertification = async () => {
             try{
                 const data = await GetCertificationsById(id, token);
                 if (data && data.length > 0) {
@@ -42,7 +48,6 @@ const StageCertificationInfo = () => {
                 console.error(err)
             }
         }
-        if(resumeData.certifications.length === 0){
             GetCertification();
         }
     }, [id, token, setResumeData]);
@@ -52,11 +57,7 @@ const StageCertificationInfo = () => {
         setCertificationData((prev) => {
             const updated = [...prev];
             updated[index] = {...updated[index], [name]: value};
-                setResumeData((resume) => ({
-            ...resume, certifications:updated,
-        }))
-
-        return updated;
+            return updated;
         });
     };
 
@@ -65,34 +66,57 @@ const StageCertificationInfo = () => {
             const updated = [...prev, emptyCer()];
             setResumeData((resume) => ({...resume, certifications: updated}))
             return updated;
-        });
+        });ertifi
     }
 
-    const deleteForm = (index) => {
-        setCertificationData((prev) => {
-            const updated = prev.filter((_, i) => i !== index);
-            setResumeData((resume) => ({...resume, certifications: updated}))
-            return updated;
-        })
-    }
+    const deleteForm = async (index) => {
+            const toDelete = certificationData[index];
+            const updated = certificationData.filter((_, i) => i !== index);
+    
+            setCertificationData(updated);
+            setResumeData(r => ({ ...r, certifications: updated }));
+    
+            try {
+                if (toDelete?.id) await DeleteCertification(toDelete.id, token);
+            } catch (e) {
+                console.error("Feiled to delete: ", e);
+                setCertificationData(prev => {
+                const roll = [...prev];
+                roll.splice(index, 0, toDelete);
+                return roll;
+                });
+                setResumeData(r => ({ ...r, certifications: certificationData }));
+            }
+        };
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        const payload = certificationData.map((cer) => ({
+        const payload = certificationData.filter((cer) => cer && cer.name?.trim() !== "")
+        .map((cer) => ({
+            id: cer.id ?? 0,
             name: cer.name,
             description: cer.description,
             date: new Date(cer.date).toISOString(),
             url: cer.url,
             type: cer.type,
             validTo: new Date(cer.validTo).toISOString(),
-            status: "NotStarted",
+            status: "InProgress",
         }));
 
         setIsLoading(true);
         try {
-            await Promise.all(payload.map((cer) => AddCertification(cer, token, id)));
+            await Promise.all(payload.map((cer) => {
+                if (cer.id !== null && cer.id > 0) {
+                    return UpdateCertification(
+                        {certificationId: cer.id,
+                        certificationData: cer,
+                        token: token});
+                }else{
+                    return AddCertification(cer, token, id)
+                }}));
             console.log('Sending certification info:', payload);
+            setResumeData(prev => ({ ...prev, certifications: payload }));
             navigate(`/cv/${id}/reference`);
             console.log('Successfully set certification info');
         }catch (error) {
@@ -123,7 +147,7 @@ const StageCertificationInfo = () => {
                         ))}
                         <button type="button" className="add-form-btn" onClick={AddForm}>Add certification</button>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate(`/cv/${id}/experience`)} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
                         </div>
                     </form>

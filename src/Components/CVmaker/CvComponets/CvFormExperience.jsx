@@ -95,7 +95,9 @@ export function CvFormExperience ({index, onChange, expData, onRemove}) {
                             type="radio" 
                             id={`active_${index}`} 
                             name={`active_${index}`}
-                            onChange={(e) => onChange(index, e)} 
+                            checked={expData.active === true}
+                            onChange={(e) => onChange(index, {
+                                target: { name: "active", value: true }})} 
                             value={true}
                         />
                         <label htmlFor="active">Active</label>
@@ -104,8 +106,10 @@ export function CvFormExperience ({index, onChange, expData, onRemove}) {
                         <input 
                             type="radio" 
                             id={`non_active_${index}`} 
+                            checked={expData.active === false}
                             name={`active_${index}`}
-                            onChange={(e) => onChange(index, e)} 
+                            onChange={(e) => onChange(index, {
+                                target: { name: "active", value: false }})}
                             value={false}
                         />
                         <label htmlFor="non-active">Not active</label>

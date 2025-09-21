@@ -27,13 +27,16 @@ export function CvFormSkills ({index, sklData, onChange, onRemove}) {
 
             <div className="input-group">
                 <label htmlFor={`type_${index}`}>Type:</label>
-                <input 
-                    type="text" 
+                <select 
                     id={`type_${index}`} 
                     name="type" 
                     onChange={(e) => onChange(index, e)} 
                     value={sklData.type}  
-                />
+                >
+                    <option value={null}>None</option>
+                    <option value="Language">Language</option>
+                    <option value="Skill">Skill</option>
+                </select>
             </div>
 
             <div className="input-group">
@@ -45,9 +48,11 @@ export function CvFormSkills ({index, sklData, onChange, onRemove}) {
                     value={sklData.level}  
                 >
                     <option value="0">None</option>
-                    <option value="1">Begynner</option>
-                    <option value="2">Intermediater</option>
-                    <option value="3">Apper Intermidiater</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
             </div>
             <button type="button" className="del-form-btn" onClick={onRemove}>Remove education</button>

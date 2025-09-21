@@ -42,7 +42,7 @@ function App() {
               <Route path="/cv/:id/experience" element={<StageExperienceInfo />}/>
               <Route path="/cv/:id/certification" element={<StageCertificationInfo />}/>
               <Route path="/cv/:id/reference" element={<StageReferenceInfo />}/>
-              <Route path="/cv/:id/my-cv" element={<CvPage/>}/>
+              <Route path="/cv/:id/mycv" element={<CvPage/>}/>
           </Routes>
         </div>
       </ResumeProvider>

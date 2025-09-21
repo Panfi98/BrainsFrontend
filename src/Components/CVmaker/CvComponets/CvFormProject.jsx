@@ -62,8 +62,10 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                             type="radio" 
                             id={`completed_${index}`} 
                             name={`completed_${index}`} 
+                            checked={projData.completed  === true}
                             value={true}
-                            onChange={onChange} 
+                            onChange={(e) => onChange(index, {
+                                target: { name: "completed", value: true }})}
                         />
                         <label htmlFor={`completed_${index}`}>Completed</label>
                     </div>
@@ -72,8 +74,10 @@ export function CvFormProject ({index, onChange, projData, onRemove}) {
                             type="radio"
                             id={`non_completed_${index}`} 
                             name={`completed_${index}`}
+                            checked={projData.completed === false}
                             value={false}
-                            onChange={onChange} 
+                            onChange={(e) => onChange(index, {
+                                target: { name: "completed", value: false }})}
                         />
                         <label htmlFor={`non_completed_${index}`} >Non completed</label>
                     </div>

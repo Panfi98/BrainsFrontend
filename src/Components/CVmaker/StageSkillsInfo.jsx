@@ -9,8 +9,11 @@ import { AddSkills } from "../../Fetcher/PostFetcher/AddSkills.js";
 import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
 import { CvFormSkills } from "./CvComponets/CvFormSkills.jsx";
 import { GetSkillsById } from "../../Fetcher/GetFetcher/GetSkills.js";
+import { UpdateSkill } from "../../Fetcher/PutFetcher/UpdateSkill.js";
+import { DeleteSkill } from "../../Fetcher/DeleteFetcher/DeleteSkill.js";
 
 const emptySkl = () => ({
+    id: 0,
     name: "",
     description: "",
     type: "",
@@ -28,33 +31,29 @@ const StageSkillsInfo = () => {
     const navigate = useNavigate();
 
     useEffect (() => {
-        const GetSkills = async () => {
+        if (resumeData.skills?.length > 0) {
+            setSkillsData(resumeData.skills);
+        } else {
+            const GetSkills = async () => {
             try{
                 const data = await GetSkillsById(id, token);
                 if (data && data.length > 0) {
-                    setResumeData(prev => ({ ...prev, skills: data }));
                     setSkillsData(data);
                 }
             }catch(err){
                 console.error(err)
             }
         }
-        if(resumeData.skills.length === 0){
             GetSkills();
         }
-    }, [id, token, setResumeData]);
+    }, [id, token, resumeData.skills]);
     
     const onChange = (index, e) => {
         const { name, value } = e.target;
         setSkillsData((prev) => {
             const updated = [...prev];
             updated[index] = { ...updated[index], [name]: value };
-            
-        setResumeData((resume) => ({
-            ...resume, skills:updated,
-        }))
-        
-        return updated;
+            return updated;
         });
     };
     
@@ -66,29 +65,52 @@ const StageSkillsInfo = () => {
         });
     }
 
-    const deleteForm = (index) => {
-        setSkillsData((prev) => {
-            const updated = prev.filter((_, i) => i !== index);
-            setResumeData((resume) => ({...resume, skills: updated}))
-            return updated;
-        })
-    }
+    const deleteForm = async (index) => {
+            const toDelete = skillsData[index];
+            const updated = skillsData.filter((_, i) => i !== index);
+    
+            setSkillsData(updated);
+            setResumeData(r => ({ ...r, skills: updated }));
+    
+            try {
+                if (toDelete?.id) await DeleteSkill(toDelete.id, token);
+            } catch (e) {
+                console.error("Feiled to delete: ", e);
+                setSkillsData(prev => {
+                const roll = [...prev];
+                roll.splice(index, 0, toDelete);
+                return roll;
+                });
+                setResumeData(r => ({ ...r, skills: skillsData }));
+            }
+        };
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        const payload = skillsData.map((skl) => ({
+        const payload = skillsData.filter((skl) => skl && skl.name?.trim() !== "")
+        .map((skl) => ({
+            id: skl.id ?? 0,
             name: skl.name,
             description: skl.description,
             type: skl.type,
             level: skl.level,
-            status: "NotStarted",
+            status: "InProgress",
         }));
 
         setIsLoading(true);
         try {
-            await Promise.all(payload.map((skl) => AddSkills(skl, token, id)));
+            await Promise.all(payload.map((skl) => {
+                if (skl.id !== null && skl.id > 0) {
+                    return UpdateSkill(
+                        {skillId: skl.id,
+                        skillsData: skl,
+                        token: token});
+                }else{
+                    return AddSkills(skl, token, id)
+                }}));
             console.log('Sending skills info:', payload);
+            setResumeData(prev => ({...prev, skills: payload}))
             navigate(`/cv/${id}/experience`);
             console.log('Successfully set skills info');
         }catch (error) {
@@ -121,8 +143,8 @@ const StageSkillsInfo = () => {
                             <button type="button" className="add-form-btn" onClick={addForm}>Add skill</button>
                         </div>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-projects-info")} className="previous-btn">Previous stage</button>
-                            <button type="submit" onClick={(onSubmit)} className="next-btn">Next stage</button>
+                            <button type="button" onClick={() => navigate(`/cv/${id}/projects`)} className="previous-btn">Previous stage</button>
+                            <button type="submit" className="next-btn">Next stage</button>
                         </div>
                     </form>
                 </div>

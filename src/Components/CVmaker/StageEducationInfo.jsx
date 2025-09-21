@@ -12,7 +12,7 @@ import { UpdateEducation } from "../../Fetcher/PutFetcher/UpdateEducation.js";
 import { DeleteEducation } from "../../Fetcher/DeleteFetcher/DeleteEducation.js";
 
 const emptyEdu = () => ({
-  id: null,
+  id: 0,
   name: "",
   description: "",
   startDate: "",
@@ -35,35 +35,31 @@ const StageEducationInfo = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const GetEducation = async () => {
-            try{
+        if (resumeData.educations?.length > 0) {
+            setEducationData(resumeData.educations);
+        } else {
+            const GetEducation = async () => {
+            try {
                 const data = await GetEducationById(id, token);
                 if (data && data.length > 0) {
-                    setResumeData(prev => ({ ...prev, educations: data }));
                     setEducationData(data);
                 }
-            }catch(err){
-                console.error(err)
+            } catch (err) {
+                console.error(err);
             }
         }
-        if(resumeData.educations.length === 0){
             GetEducation();
         }
-    }, [id, token, setResumeData]);
+        }, [id, token, resumeData.educations]);
 
     const onChange = (index, e) => {
         const { name, value } = e.target;
-        setEducationData((prev) => {
+        setEducationData(prev => {
             const updated = [...prev];
-            updated[index] = {...updated[index], [name]: value};
-
-        setResumeData((resume) => ({
-            ...resume, educations: updated,
-        }))
-
+            updated[index] = { ...updated[index], [name]: value };
             return updated;
         });
-    };
+        };
 
     const addForm = () => {
         setEducationData((prev) => {
@@ -81,7 +77,7 @@ const StageEducationInfo = () => {
         setResumeData(r => ({ ...r, educations: updated }));
 
         try {
-            if (toDelete?.id) await DeleteEducation(toDelete.id, token);
+            if (toDelete?.id) await DeleteProject(toDelete.id, token);
         } catch (e) {
             console.error("Feiled to delete: ", e);
             setEducationData(prev => {
@@ -98,7 +94,7 @@ const StageEducationInfo = () => {
 
         const payload = educationData.filter((edu) => edu && edu.name?.trim() !== "")
         .map((edu) => ({
-            id: edu.id ?? null,
+            id: edu.id ?? 0,
             name: edu.name,
             type: edu.type,
             startDate: new Date(edu.startDate).toISOString(),
@@ -106,7 +102,7 @@ const StageEducationInfo = () => {
             description: edu.description,
             degree: edu.degree,
             place: edu.place,
-            active: edu.active === "true",
+            active: edu.active,
             status: "InProgress",
         }));
 
@@ -115,7 +111,7 @@ const StageEducationInfo = () => {
             console.log("Payload before submit:", payload);
             console.log("Raw educationData:", educationData);
             await Promise.all(payload.map((edu) => {
-                if (edu.id !== null && edu.id !== undefined) {
+                if (edu.id !== null && edu.id > 0) {
                     return UpdateEducation(
                         {educationId: edu.id,
                         educationData: edu,
@@ -124,6 +120,7 @@ const StageEducationInfo = () => {
                     return AddEducation(edu, token, id)
                 }}));
             console.log("Sending education info:", payload);
+            setResumeData(prev => ({ ...prev, educations: payload }));
             navigate(`/cv/${id}/projects`);
             console.log("Successfully set education infof");
         }catch (error) {
@@ -154,7 +151,7 @@ const StageEducationInfo = () => {
                         ))}
                         <button type="button" className="add-form-btn" onClick={addForm}>Add education</button>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate("/cv")} className="previous-btn">Previous stage</button>
                             <button type="submit" className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
                         </div>
                     </form>
