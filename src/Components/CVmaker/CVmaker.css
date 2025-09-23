@@ -10,6 +10,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    position: sticky;
+    top: 114px;
     padding: 50px;
     background-color: #FFFFFF;
     border-radius: 12px;
@@ -239,6 +241,8 @@
     align-items: center;
     width: min-content;
     height: min-content;
+    position: sticky;
+    top: 114px;
     background-color: #FFFFFF;
     border-radius: 12px;
     padding: 50px;

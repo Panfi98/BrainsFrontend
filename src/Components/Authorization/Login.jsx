@@ -21,7 +21,7 @@ export const Login = () => {
         setIsLoading(true);
         try {
             await authenticate();
-            navigate("/dashboard");
+            navigate("/your-applications");
             console.log("Authentication successfull. Token: ", token)
         } catch (error) {
             console.error("Authentication failed:", error);

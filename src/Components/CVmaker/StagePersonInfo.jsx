@@ -23,26 +23,24 @@ const StagePersonInfo = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
 
-    // утилита: File → DataURL
     const fileToDataURL = (file) =>
         new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result); // data:image/...;base64,...
+            reader.onload = () => resolve(reader.result);
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
 
-    // общий обработчик
     const onChange = async (e) => {
         const { name, value, files } = e.target;
 
         if (name === "pictureURL" && files && files[0]) {
             const file = files[0];
-            const dataUrl = await fileToDataURL(file); // преобразуем в data URL
+            const dataUrl = await fileToDataURL(file);
             setPersonData((prev) => ({
                 ...prev,
-                pictureURL: dataUrl, // сохраняем data URL
-                pictureFile: file,   // если захочешь отправить как файл
+                pictureURL: dataUrl,
+                pictureFile: file,   
             }));
         } else {
             setPersonData((prev) => ({

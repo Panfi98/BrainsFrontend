@@ -58,24 +58,20 @@ const CvPage = () => {
   if (error) return <div>Error loading CV: {error}</div>;
   if (!cvData) return <div>CV not found or unable to load data.</div>;
 
-  // разделение skills
   const languages =
     cvData.infoSkills?.filter((s) => s.type?.toLowerCase() === "language") || [];
   const otherSkills =
     cvData.infoSkills?.filter((s) => s.type?.toLowerCase() !== "language") || [];
 
-  // исключаем, чтобы отрендерить отдельно
   const ignoredKeys = ["resume", "infoSkills", "educations", "references"];
   const ignoredFields = ["id", "_id", "uuid", "status"];
 
-  // форматирование дат → "MM.YYYY"
   const formatDate = (dateStr) => {
     if (!dateStr) return "Present";
     const date = new Date(dateStr);
     return `${date.getMonth() + 1}.${date.getFullYear()}`;
   };
 
-  // рендер квадратиков для скилов
   const renderSkillLevel = (level) => {
     const max = 5;
     const filled = "■".repeat(level);
@@ -86,7 +82,6 @@ const CvPage = () => {
   return (
     <div className="cv-page">
       <div className="cv-a4" ref={contentRef}>
-        {/* Sidebar */}
         <aside className="cv-sidebar">
             {cvData.resume?.pictureURL && (
                 <img
@@ -101,7 +96,6 @@ const CvPage = () => {
             <p className="cv-contact">{cvData.resume?.email}</p>
             <p className="cv-contact">{cvData.resume?.phoneNumber}</p>
 
-            {/* Languages всегда идут первыми */}
             {languages.length > 0 && (
                 <div className="cv-block">
                 <h3 className="cv-subtitle">Languages</h3>
@@ -113,7 +107,6 @@ const CvPage = () => {
                 </div>
             )}
 
-            {/* Skills всегда идут после Languages */}
             {otherSkills.length > 0 && (
                 <div className="cv-block">
                 <h3 className="cv-subtitle">Skills</h3>
@@ -126,8 +119,6 @@ const CvPage = () => {
             )}
             </aside>
 
-
-        {/* Main */}
         <main className="cv-main">
           {cvData.resume?.summary && (
             <section className="cv-section">
@@ -136,7 +127,6 @@ const CvPage = () => {
             </section>
           )}
 
-          {/* Education (специальный рендер) */}
           {cvData.educations?.length > 0 && (
             <section className="cv-section">
               <h2 className="cv-section-title">Education</h2>
@@ -155,7 +145,6 @@ const CvPage = () => {
             </section>
           )}
 
-          {/* Универсальные секции */}
           {Object.keys(cvData)
             .filter((key) => !ignoredKeys.includes(key))
             .map((key) => {
@@ -221,7 +210,6 @@ const CvPage = () => {
                             })}
                           </div>
 
-                          {/* Даты (для education, experience и сертификатов) */}
                         {(start || end || item.date || item.validTo) && (
                         <span className="cv-item-dates">
                             {start || end
@@ -239,7 +227,6 @@ const CvPage = () => {
               );
             })}
 
-          {/* References (всегда в конце) */}
           {cvData.references?.length > 0 && (
             <section className="cv-section">
               <h2 className="cv-section-title">References</h2>

@@ -113,7 +113,7 @@ const StageReferenceInfo = () => {
                 }}));
             console.log('Sending reference info:', referenceData);
             setResumeData(prev => ({ ...prev, references: payload }));
-            navigate(`/cv/${id}/my-cv`);
+            navigate(`/cv/${id}/mycv`);
             console.log('Successfully set reference info');
         }catch (error) {
             console.error('Reference info error:', error);
