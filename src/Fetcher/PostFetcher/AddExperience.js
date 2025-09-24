@@ -22,5 +22,7 @@ export async function AddExperience(experiencenData, token, resumeId) {
         throw err;
     }
 
+    console.log("Response: ", response)
+
     return response;
 }

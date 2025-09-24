@@ -1,65 +1,128 @@
-import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
-import { AddEducation } from "../../Fetcher/AddEducation.js";
+import { AddEducation } from "../../Fetcher/PostFetcher/AddEducation.js";
+import { GetEducationById } from "../../Fetcher/GetFetcher/GetEducation.js";
+import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
+import { CvFormEducation } from "./CvComponets/CvFromEducation.jsx";
+import { UpdateEducation } from "../../Fetcher/PutFetcher/UpdateEducation.js";
+import { DeleteEducation } from "../../Fetcher/DeleteFetcher/DeleteEducation.js";
+
+const emptyEdu = () => ({
+  id: 0,
+  name: "",
+  description: "",
+  startDate: "",
+  endDate: "",
+  degree: "",
+  type: "",
+  place: "",
+  active: "",
+  status: "InProgress",
+});
 
 const StageEducationInfo = () => {
 
-    const [newEducationData, setNewEducationData] = useState({
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        degree: "",
-        type: "",
-        place: "",
-        active: "",
-        status: "InProgress",
-    });
-
+    const {resumeData, setResumeData} = useResume();
+    const [educationData, setEducationData] = useState(
+        resumeData.educations.length > 0 ? resumeData.educations : [emptyEdu()]);
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const onChange = (e) => {
+    useEffect(() => {
+        if (resumeData.educations?.length > 0) {
+            setEducationData(resumeData.educations);
+        } else {
+            const GetEducation = async () => {
+            try {
+                const data = await GetEducationById(id, token);
+                if (data && data.length > 0) {
+                    setEducationData(data);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+            GetEducation();
+        }
+        }, [id, token, resumeData.educations]);
+
+    const onChange = (index, e) => {
         const { name, value } = e.target;
-        setNewEducationData((newEducationData) => ({
-            ...newEducationData, [name]: value,
-        }));
+        setEducationData(prev => {
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [name]: value };
+            return updated;
+        });
+        };
+
+    const addForm = () => {
+        setEducationData((prev) => {
+            const updated = [...prev, emptyEdu()];
+            setResumeData((resume) => ({...resume, educations: updated}))
+            return updated;
+        });
+    }
+
+    const deleteForm = async (index) => {
+        const toDelete = educationData[index];
+        const updated = educationData.filter((_, i) => i !== index);
+
+        setEducationData(updated);
+        setResumeData(r => ({ ...r, educations: updated }));
+
+        try {
+            if (toDelete?.id) await DeleteProject(toDelete.id, token);
+        } catch (e) {
+            console.error("Feiled to delete: ", e);
+            setEducationData(prev => {
+            const roll = [...prev];
+            roll.splice(index, 0, toDelete);
+            return roll;
+            });
+            setResumeData(r => ({ ...r, educations: educationData }));
+        }
     };
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        const payload = {
-            name: newEducationData.name,
-            type: newEducationData.type,
-            startDate: new Date(newEducationData.startDate).toISOString(),
-            endDate: new Date(newEducationData.endDate).toISOString(),
-            description: newEducationData.description,
-            degree: newEducationData.degree,
-            place: newEducationData.place,
-            active: newEducationData.active === "true",
-            status: "NotStarted",
-        };
-    
+        const payload = educationData.filter((edu) => edu && edu.name?.trim() !== "")
+        .map((edu) => ({
+            id: edu.id ?? 0,
+            name: edu.name,
+            type: edu.type,
+            startDate: new Date(edu.startDate).toISOString(),
+            endDate: new Date(edu.endDate).toISOString(),
+            description: edu.description,
+            degree: edu.degree,
+            place: edu.place,
+            active: edu.active,
+            status: "InProgress",
+        }));
+
         setIsLoading(true);
         try {
-            console.log(`Fetching CV data for ID: ${id}`);
-            const response = await AddEducation(payload, token, id);
+            console.log("Payload before submit:", payload);
+            console.log("Raw educationData:", educationData);
+            await Promise.all(payload.map((edu) => {
+                if (edu.id !== null && edu.id > 0) {
+                    return UpdateEducation(
+                        {educationId: edu.id,
+                        educationData: edu,
+                        token: token});
+                }else{
+                    return AddEducation(edu, token, id)
+                }}));
             console.log("Sending education info:", payload);
-            if (response.ok) {
-                navigate(`/cv/${id}/projects`);
-                console.log("Successfully set education info");
-            } else {
-                const errorDetails = await response.json();
-                console.error("AddEducation failed:", errorDetails);
-                alert(`Error: ${errorDetails.message || "Failed to add education info"}`);
-            }
+            setResumeData(prev => ({ ...prev, educations: payload }));
+            navigate(`/cv/${id}/projects`);
+            console.log("Successfully set education infof");
         }catch (error) {
             console.error('Education info error:', error);
         } finally {
@@ -69,87 +132,28 @@ const StageEducationInfo = () => {
 
     return(
         <div className="cv-maker-container">
-            <div className="progress-bar">
-                <p>CV progress</p>
-                <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/education`)}>Education info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/projects`)}>Project info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/skills`)}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/experience`)}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/certification`)}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/reference`)}>Reference info</button>
-            </div>
+            <ProgressBar id={id}/>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
                     <h2>Stage 2</h2>
                 </div>
                 <div className="cv-form">
-                    <form>
-                        <h2>Education info</h2>
-                        <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="startDate">Started at:</label>
-                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="endDate">Ended at:</label>
-                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="degree">Degree:</label>
-                            <select id="degree" name="degree" onChange={onChange}> 
-                                <option value="none">None</option>
-                                <option value="bachelor">Bachelor</option>
-                                <option value="master">Master</option>
-                                <option value="phd">PhD</option>
-                            </select>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="type">Type:</label>
-                            <select id="type" name="type" onChange={onChange}>
-                                <option value="none">None</option>
-                                <option value="economist">Economist</option>
-                                <option value="programist">Programist</option>
-                                <option value="jurist">Jurist</option>
-                            </select>
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="place">Place:</label>
-                            <input type="text" id="place" name="place" onChange={onChange}></input>
-                        </div>
-                    
-                        <div className="input-group">
-                            <label htmlFor="active">Active:</label>
-                            <div className="radio-group">
-                                <div className="radio-option">
-                                    <input type="radio" id="active" name="active" value="true" onChange={onChange} />
-                                    <label htmlFor="active">Active</label>
-                                </div>
-                                <div className="radio-option">
-                                    <input type="radio" id="non active" name="non active" value="false" onChange={onChange} />
-                                    <label htmlFor="non-active">Not active</label>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <form onSubmit={onSubmit}>
+                        {educationData.map((edu, index) => (
+                            <CvFormEducation 
+                                key={index}
+                                index={index} 
+                                onChange={onChange}
+                                onRemove={() => deleteForm(index)}
+                                eduData = {edu}
+                            />
+                        ))}
+                        <button type="button" className="add-form-btn" onClick={addForm}>Add education</button>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-person-info")} className="previous-btn">Previous stage</button>
-                            <button type="button" onClick={(onSubmit)} className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
-                        </div> 
+                            <button type="button" onClick={() => navigate("/cv")} className="previous-btn">Previous stage</button>
+                            <button type="submit" className="next-btn" disabled={isLoading}>{isLoading ? "Loading..." : "Next stage"}</button>
+                        </div>
                     </form>
                 </div>
             </div>

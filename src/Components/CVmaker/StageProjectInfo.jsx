@@ -1,118 +1,152 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import './CVmaker.css';
-import { AddProject } from "../../Fetcher/AddProject.js";
+import { AddProject } from "../../Fetcher/PostFetcher/AddProject.js";
+import { ProgressBar } from "./CvComponets/Progress-bar.jsx";
+import { CvFormProject } from "./CvComponets/CvFormProject.jsx";
+import { useResume } from "../../Context/ResumeContext.jsx";
+import { GetProjectsById } from "../../Fetcher/GetFetcher/GetProjects.js";
+import {UpdateProject} from "../../Fetcher/PutFetcher/UpdateProject.js";
+import { DeleteProject } from "../../Fetcher/DeleteFetcher/DeleteProject.js";
+
+const emptyProj = () => ({
+    id: 0,
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    completed: "",
+    status: "InProgress",
+});
 
 const StageProjectInfo = () => {
-    const [newProjectData, setNewProjectData] = useState({
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        completed: "",
-        status: "InProgress",
-        });
-    
-        const [isLoading, setIsLoading] = useState(false);
-        const { id } = useParams();
-        const { token } = useAuth();
-        const navigate = useNavigate();
-    
-        const onChange = (e) => {
-            const { name, value } = e.target;
-            setNewProjectData((newProjectData) => ({
-                ...newProjectData, [name]: value,
-            }));
-        };
-    
-        const onSubmit = async (e) => {
-            e.preventDefault();
 
-            const payload = {
-                name: newProjectData.name,
-                description: newProjectData.description,
-                startDate: new Date(newProjectData.startDate).toISOString(), // Преобразование в ISO 8601
-                endDate: new Date(newProjectData.endDate).toISOString(),
-                completed: newProjectData.completed === "true",
-                status: "NotStarted",
-            };
-    
-            setIsLoading(true);
-            try {
-                const response = await AddProject(payload, token, id);
-                console.log('Sending project info:', payload);
-                if (response.ok) {
-                    navigate(`/cv/${id}/skills`);
-                    console.log('Successfully set project info');
+    const {resumeData, setResumeData} = useResume();
+    const [projectData, setProjectData] = useState(
+        resumeData.projects.length > 0 ? resumeData.projects : [emptyProj()]);
+    const [isLoading, setIsLoading] = useState(false);
+    const { id } = useParams();
+    const { token } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect (() => {
+        if (resumeData.projects?.length > 0) {
+            setProjectData(resumeData.projects);
+        } else {
+            const GetProject = async () => {
+            try{
+                const data = await GetProjectsById(id, token);
+                if (data && data.length > 0) {
+                    setProjectData(data);
                 }
-            }catch (error) {
-                console.error('Project info error:', error);
-            } finally {
-                setIsLoading(false);
+            }catch(err){
+                console.error(err)
+            }
+        }
+            GetProject();
+        }
+    }, [id, token, resumeData.projects]);
+
+    const onChange = (index, e) => {
+        const { name, value } = e.target;
+        setProjectData(prev => {
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [name]: value };
+            return updated;
+        });
+    };
+
+    const addForm = () => {
+        setProjectData((prev) => {
+            const updated = [...prev, emptyProj()];
+            setResumeData((resume) => ({...resume, projects: updated}))
+            return updated;
+        });
+    }
+
+    const deleteForm = async (index) => {
+            const toDelete = projectData[index];
+            const updated = projectData.filter((_, i) => i !== index);
+    
+            setProjectData(updated);
+            setResumeData(r => ({ ...r, projects: updated }));
+    
+            try {
+                if (toDelete?.id) await DeleteProject(toDelete.id, token);
+            } catch (e) {
+                console.error("Feiled to delete: ", e);
+                setProjectData(prev => {
+                const roll = [...prev];
+                roll.splice(index, 0, toDelete);
+                return roll;
+                });
+                setResumeData(r => ({ ...r, projects: projectData }));
             }
         };
 
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
+        const payload = projectData.filter((proj) => proj && proj.name?.trim() !== "")
+        .map((proj) => ({
+                id: proj.id ?? 0,
+                name: proj.name,
+                description: proj.description,
+                startDate: new Date(proj.startDate).toISOString(),
+                endDate: new Date(proj.endDate).toISOString(),
+                completed: proj.completed,
+                status: "InProgress",
+            }));
+
+        setIsLoading(true);
+        try {
+            await Promise.all(payload.map((proj) => {
+                if (proj.id !== null && proj.id > 0) {
+                    return UpdateProject(
+                        {projectId: proj.id,
+                        projectData: proj,
+                        token: token});
+                }else{
+                    return AddProject(proj, token, id)
+                }}));
+            console.log('Sending project info:', payload);
+            setResumeData(prev => ({ ...prev, projects: payload }));
+            navigate(`/cv/${id}/skills`);
+            console.log('Successfully set project info');
+        }catch (error) {
+            console.error('Project info error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return(
         <div className="cv-maker-container">
-            <div className="progress-bar">
-                <p>CV progress</p>
-                <button className="progress-button" onClick={() => navigate("/stage-person-info")}>Personal info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/education`)}>Education info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/projects`)}>Project info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/skills`)}>Skills info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/experience`)}>Experience info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/certification`)}>Certification info</button>
-                <button className="progress-button" onClick={() => navigate(`/cv/${id}/reference`)}>Reference info</button>
-            </div>
+            <ProgressBar id={id}/>
             <div className="cv-maker">
                 <div className="cv-maker-header">
                     <h1>CV Maker</h1>
                     <h2>Stage 3</h2>
                 </div>
                 <div className="cv-form">
-                    <form>
-                        <h2>Project info</h2>
-                        <div className="input-group">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" id="name" name="name" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="description">Description:</label>
-                            <textarea id="description" name="description" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="startDate">Started at:</label>
-                            <input type="date" id="startDate" name="startDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="endDate">Complited at:</label>
-                            <input type="date" id="endDate" name="endDate" onChange={onChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <label htmlFor="completed">Completed:</label>
-                            <div className="radio-group">
-                                <div className="radio-option">
-                                    <input type="radio" id="completed" name="completed" value="true" onChange={onChange} />
-                                    <label htmlFor="completed">Completed</label>
-                                </div>
-                                <div className="radio-option">
-                                    <input type="radio" id="non completed" name="completed" value="false" onChange={onChange} />
-                                    <label htmlFor="non-completed">Non completed</label>
-                                </div>
-                            </div>
-                        </div>
-
+                    <form onSubmit={onSubmit}>
+                        {projectData.map((proj, index) => (
+                            <CvFormProject
+                                key={index}
+                                index={index}
+                                projData={proj}
+                                onChange={onChange}
+                                onRemove={() => deleteForm(index)} 
+                            />
+                        ))}
+                        <button type="button" className="add-form-btn" onClick={addForm}>Add project</button>
                         <div className="button-group">
-                            <button type="button" onClick={() => navigate("/stage-education-info")} className="previous-btn">Previous stage</button>
+                            <button type="button" onClick={() => navigate(`/cv/${id}/education`)} className="previous-btn">Previous stage</button>
                             <button type="button" onClick={(onSubmit)} className="next-btn">Next stage</button>
-                        </div> 
+                        </div>
                     </form>
                 </div>
             </div>

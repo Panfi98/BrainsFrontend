@@ -1,19 +1,23 @@
-import React, {useState, useContext} from "react";
+import React, {createContext, useContext, useState} from "react";
 
-const ResumeContext = React.createContext()
+const ResumeContext = createContext()
 
-export function useResume() {
-    return useContext(ResumeContext)
-}
-
-export function ResumeProvider(props){
-    const [resumeData, setResumeData] = useState({});
-
-    const value = {
-        resumeData,
-        setResumeData
-    }
+export const ResumeProvider = ({children}) => {
+    const [resumeData, setResumeData] = useState({
+        person: null,
+        educations: [],
+        projects: [],
+        skills: [],
+        experiences: [],
+        certifications: [],
+        references: []
+    });
 
     return(
-        <ResumeContext.Provider value={value}>{props.children}</ResumeContext.Provider>)
+        <ResumeContext.Provider value={{resumeData, setResumeData}}>
+            {children}
+        </ResumeContext.Provider>
+    )
 }
+
+export const useResume = () => useContext(ResumeContext);

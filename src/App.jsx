@@ -4,7 +4,6 @@ import {SignUp} from "./Components/Authorization/SignUp.jsx";
 import {AuthProvider} from "./Context/AuthContext.jsx";
 import { ResumeProvider } from './Context/ResumeContext.jsx';
 import {Routes,Route,useLocation} from 'react-router-dom';
-import Dashboard from "./Components/Dashboard.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import FirstPage from "./Components/FirstPage/FirstPage.jsx";
 import YourApplications from "./Components/Your Applications/YourApplications.jsx";
@@ -33,7 +32,6 @@ function App() {
               <Route path="/login" element={<Login />}/>
               <Route path="/signup" element={<SignUp/>}/>
               <Route path="/profile" element={<Profile />}/>
-              <Route path="/dashboard" element={<Dashboard />}/>
               <Route path="/your-applications" element={<YourApplications />}/>
               <Route path="/cv" element={<StagePersonInfo />}/>
               <Route path="/cv/:id/education" element={<StageEducationInfo />}/>
@@ -42,7 +40,7 @@ function App() {
               <Route path="/cv/:id/experience" element={<StageExperienceInfo />}/>
               <Route path="/cv/:id/certification" element={<StageCertificationInfo />}/>
               <Route path="/cv/:id/reference" element={<StageReferenceInfo />}/>
-              <Route path="/cv/:id/my-cv" element={<CvPage/>}/>
+              <Route path="/cv/:id/mycv" element={<CvPage/>}/>
           </Routes>
         </div>
       </ResumeProvider>
