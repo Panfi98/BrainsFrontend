@@ -3,7 +3,7 @@
 The client-side interface for **JobKit**, a job-finding and CV/cover letter preparation platform.  
 Built with **React** and **Vite**.
 
-BrainsFrontend is a Single Page Application (SPA) frontend connected to [another repository] https://github.com/Panfi98/Brains.git), providing job seekers with tools to search for jobs, manage applications, and create professional CVs and cover letters.
+BrainsFrontend is a Single Page Application (SPA) frontend connected to [another repository] (https://github.com/Panfi98/Brains.git), providing job seekers with tools to search for jobs, manage applications, and create professional CVs and cover letters.
 It communicates with the JobKit backend to handle authentication, data fetching, and user interactions.
 
 Currently, the project is not fully completed. At this stage, you can only create a CV using one template, but it has great potential for future development.
